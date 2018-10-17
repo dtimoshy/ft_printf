@@ -26,11 +26,11 @@ static int			wchar_bytes(wchar_t value)
 		temp /= 2;
 		res++;
 	}
-	if (res > 16)
+	if (res > 16 MB_CUR_MAX >= 4)
 		return (4);
-	else if (res > 11 && res <= 16)
+	else if (res > 11 && res <= 16 && MB_CUR_MAX >= 3)
 		return (3);
-	else if(res > 7 && res <= 11)
+	else if(res > 7 && res <= 11 MB_CUR_MAX >= 2)
 		return (2);
 	else
 		return (1);
