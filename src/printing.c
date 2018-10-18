@@ -97,19 +97,34 @@ int			print_value(t_handler *h, char *result, size_t len, bool neg_sign)
 	return (printed);
 }
 
-int			print_conversion(t_handler *h, va_list args)
+int			num_conversion(t_handler *h, va_list args)
 {
 	int res;
 
 	res = 0;
 	if (h->sp == 'd')
-		res = print_num_signed(h, args);
-	else if (ft_strchr("uoxXp", h->sp))
-		res = print_num_unsigned(h, args);
-	else if (h->sp == 's')
-		res = print_string(h, args);
-	else if (h->sp == 'c' || h->sp == '%' || !ft_strchr("c%", h->sp))
-		res = print_char(h, args);
+		res = handle_d(h, args);
+	else if (h->sp == 'u')
+		res = handle_u(h, args);
+	else if (h->sp == 'o')
+		res = handle_o(h, args);
+	else if (h->sp == 'x')
+		res = handle_x(h, args);
+	else if (h->sp == 'p')
+		res = handle_p(h, args);
+	else if (ft_strchr("X", h->sp))
+		res = handle_ux(h, args);
 	return (res);
 }
 
+int			char_conversion(t_handler *h, va_list args)
+{
+	int res;
+
+	res = 0;
+	if (h->sp == 's')
+		res = print_string(h, args);
+	else if (h->sp == 'c' || h->sp == '%' || !ft_strchr("duoxXpc%", h->sp))
+		res = print_char(h, args);
+	return (res);
+}

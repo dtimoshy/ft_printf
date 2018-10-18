@@ -16,11 +16,16 @@ IFLAGS := -I $(INC_DIR) -I $(LIBFT_INC)
 
 SRC := \
 ft_printf.c\
-numbers.c\
 strings.c\
 chars.c\
 parsing.c\
 printing.c\
+handle_d.c \
+handle_u.c \
+handle_o.c \
+handle_x.c \
+handle_p.c \
+handle_ux.c \
 utiles.c
 
 

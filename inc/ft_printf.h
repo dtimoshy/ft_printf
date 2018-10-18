@@ -50,17 +50,21 @@ typedef struct	s_handler
 int				ft_printf(const char *format, ...);
 void			parse_length(const char **fmt, t_handler *handler);
 void			parse_specifier(const char **fmt, t_handler *handler);
-int				print_num_unsigned(t_handler *handler, va_list args);
-int				print_num_signed(t_handler *handler, va_list args);
+int				handle_d(t_handler *h, va_list args);
+int				handle_u(t_handler *handler, va_list args);
+int				handle_o(t_handler *handler, va_list args);
+int				handle_x(t_handler *handler, va_list args);
+int				handle_p(t_handler *handler, va_list args);
+int				handle_ux(t_handler *handler, va_list args);
 int				print_char(t_handler *h, va_list args);
 int				print_string(t_handler *h, va_list args);
 int				print_value(t_handler *h, char *result,
 							size_t len, bool neg_sign);
-int				print_conversion(t_handler *h, va_list args);
+int				num_conversion(t_handler *h, va_list args);
+int				char_conversion(t_handler *h, va_list args);
 char			*get_wchar(wchar_t value);
-char			*convert_base(size_t unsgnd, int base,
-							bool upper_case, bool is_unsigned);
-bool			check_val_prec(int prec, char **result);
+char			*convert_base_opux(size_t unsgnd, int base);
+bool			check_precision(int prec, char **result);
 size_t			get_numlen(size_t usigned_num, int base, bool is_unsigned);
 char			*printf_strjoin(char *s1, char *s2);
 

@@ -99,7 +99,7 @@ OBJ = $(SRC:.c=.o)
 
 CFLAGS = -Wall -Wextra -Werror -c
 
-all:	$(NAME)
+all:    $(NAME)
 
 $(NAME): $(OBJ)
 	@ ar rc $(NAME) $(OBJ)

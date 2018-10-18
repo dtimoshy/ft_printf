@@ -86,7 +86,8 @@ static int			convert_specifier(const char **format, va_list arg)
 	handler->space_flag = false;
 	if (parse_to_handler(format, handler) == 0)
 		return (0);
-	chars_printed = print_conversion(handler, arg);
+	chars_printed = num_conversion(handler, arg);
+	chars_printed += char_conversion(handler,arg);
 	ft_memdel((void **)&handler);
 	return (chars_printed);
 }
