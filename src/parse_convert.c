@@ -119,8 +119,6 @@ int			char_conversion(t_handler *h, va_list args)
 		res = handle_string(h, args);
 	else if (h->spec == 'c')
 		res = handle_char(h, args);
-	else if (h->spec == 'n')
-		res = handle_other(h);
 	else if (h->spec == '%' || !ft_strchr("duoxXpc%", h->spec))
 		res = handle_other(h);
 	return (res);
