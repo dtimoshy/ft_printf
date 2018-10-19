@@ -27,15 +27,15 @@ typedef enum	e_length
 
 typedef struct	s_handler
 {
-	int			pad_right;
-	int			pad_zero;
-	int			force_sign;
-	int			space_flag;
+	int			right;
+	int			zero;
+	int			sign;
+	int			space;
 	int			hash;
 	int			width;
 	int			prec;
 	t_length	length;
-	char		sp;
+	char		spec;
 }				t_handler;
 
 int				ft_printf(const char *format, ...);

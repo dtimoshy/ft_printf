@@ -6,11 +6,11 @@ static int		print_width_c(t_handler *h, size_t value_len)
 	int chars;
 
 	chars = 0;
-	if (h->pad_right)
-		h->pad_zero = 0;
+	if (h->right)
+		h->zero = 0;
 	while (h->width-- > (int)value_len)
 	{
-		if (h->pad_zero)
+		if (h->zero)
 			ft_putchar('0');
 		else
 			ft_putchar(' ');
@@ -24,7 +24,7 @@ static int		print_char(t_handler *h, char *result, size_t len)
 	int printed;
 
 	printed = (int)len;
-	if (h->pad_right)
+	if (h->right)
 	{
 		printed += prec_check_print(h->prec, len, 0, 1);
 		if (h->length != L)

@@ -7,11 +7,11 @@ static int	print_width_other(t_handler *h, size_t value_len)
 	chars = 0;
 	if (h->prec > (int)value_len)
 		value_len += h->prec - value_len;
-	if (h->pad_right)
-		h->pad_zero = 0;
+	if (h->right)
+		h->zero = 0;
 	while (h->width-- > (int)value_len)
 	{
-		if (h->pad_zero)
+		if (h->zero)
 			ft_putchar('0');
 		else
 			ft_putchar(' ');
@@ -25,7 +25,7 @@ int			print_other(t_handler *h, char *result, size_t len)
 	int printed;
 
 	printed = (int)len;
-	if (h->pad_right)
+	if (h->right)
 	{
 		printed += prec_check_print(h->prec, len, 0, 1);
 		ft_putstr(result);
@@ -47,7 +47,7 @@ int			handle_other(t_handler *handler)
 	size_t	len;
 
 	value = ft_strnew(1);
-	value[0] = handler->sp;
+	value[0] = handler->spec;
 	if (value[0] == '\0')
 		len = 1;
 	else

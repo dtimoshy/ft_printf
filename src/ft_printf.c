@@ -15,21 +15,21 @@
 void				parse_flags(const char **fmt, t_handler *handler)
 {
 	if ((**fmt == ' '))
-		handler->space_flag = 1;
+		handler->space = 1;
 	if (**fmt == '#')
 		handler->hash = 1;
 	if (**fmt == '-')
-		handler->pad_right = 1;
+		handler->right = 1;
 	if (**fmt == '0')
-		handler->pad_zero = 1;
+		handler->zero = 1;
 	if (**fmt == '+')
-		handler->force_sign = 1;
+		handler->sign = 1;
 	(*fmt)++;
 }
 
 void				parse_precision(const char **fmt, t_handler *handler)
 {
-	if (ft_isdigit(**fmt))
+	if (**fmt >= '0' && **fmt <= '9')
 	{
 		handler->prec = ft_atoi(*fmt);
 		if (handler->prec < 0)
@@ -79,10 +79,10 @@ static int			convert_specifier(const char **format, va_list arg)
 	handler->prec = -1;
 	handler->length = NONE;
 	handler->hash = 0;
-	handler->pad_zero = 0;
-	handler->force_sign = 0;
-	handler->pad_right = 0;
-	handler->space_flag = 0;
+	handler->zero = 0;
+	handler->sign = 0;
+	handler->right = 0;
+	handler->space = 0;
 	if (parse_to_handler(format, handler) == 0)
 		return (0);
 	chars_printed = num_conversion(handler, arg);

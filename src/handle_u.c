@@ -7,11 +7,11 @@ static int	print_width_u(t_handler *h, size_t value_len)
 	chars = 0;
 	if (h->prec > (int)value_len)
 		value_len += h->prec - value_len;
-	if (h->pad_right)
-		h->pad_zero *= 0;
+	if (h->right)
+		h->zero *= 0;
 	while (h->width-- > (int)value_len)
 	{
-		if (h->pad_zero)
+		if (h->zero)
 			ft_putchar('0');
 		else
 			ft_putchar(' ');
@@ -25,8 +25,8 @@ static int	print_value_u(t_handler *h, char *result, size_t len)
 	int printed;
 
 	printed = (int)len;
-	h->pad_zero *= h->prec == -1;
-	if (h->pad_right)
+	h->zero *= h->prec == -1;
+	if (h->right)
 	{
 		printed += prec_check_print(h->prec, len, 0, 1);
 		ft_putstr(result);

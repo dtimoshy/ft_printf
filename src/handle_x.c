@@ -19,11 +19,11 @@ static int		print_width_x(t_handler *h, size_t value_len)
 	if (h->prec > (int)value_len)
 		value_len += h->prec - value_len;
 	value_len += h->hash * 2;
-	if (h->pad_right)
-		h->pad_zero *= 0;
+	if (h->right)
+		h->zero *= 0;
 	while (h->width-- > (int)value_len)
 	{
-		if (h->pad_zero)
+		if (h->zero)
 			ft_putchar('0');
 		else
 			ft_putchar(' ');
@@ -37,8 +37,8 @@ static int		print_value_x(t_handler *h, char *result, size_t len)
 	int printed;
 
 	printed = (int)len;
-	h->pad_zero *= h->prec == -1;
-	if (h->pad_right)
+	h->zero *= h->prec == -1;
+	if (h->right)
 	{
 		printed += print_prefix_x(h);
 		printed += prec_check_print(h->prec, len, 0, 1);
@@ -47,10 +47,10 @@ static int		print_value_x(t_handler *h, char *result, size_t len)
 	}
 	else
 	{
-		if (h->pad_zero)
+		if (h->zero)
 			printed += print_prefix_x(h);
 		printed += print_width_x(h, len);
-		if (!(h->pad_zero))
+		if (!(h->zero))
 			printed += print_prefix_x(h);
 		printed += prec_check_print(h->prec, len, 0, 1);
 		ft_putstr(result);

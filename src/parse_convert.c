@@ -17,12 +17,12 @@ void	parse_specifier(const char **fmt, t_handler *handler)
 	if (ft_strchr("DOUCSp", **fmt))
 	{
 		handler->length = L;
-		handler->sp = (char)ft_tolower(**fmt);
+		handler->spec = (char)ft_tolower(**fmt);
 	}
 	else if (**fmt == 'i')
-		handler->sp = 'd';
+		handler->spec = 'd';
 	else
-		handler->sp = **fmt;
+		handler->spec = **fmt;
 	(*fmt)++;
 }
 
@@ -95,17 +95,17 @@ int			num_conversion(t_handler *h, va_list args)
 	int res;
 
 	res = 0;
-	if (h->sp == 'd')
+	if (h->spec == 'd')
 		res = handle_d(h, args);
-	else if (h->sp == 'u')
+	else if (h->spec == 'u')
 		res = handle_u(h, args);
-	else if (h->sp == 'o')
+	else if (h->spec == 'o')
 		res = handle_o(h, args);
-	else if (h->sp == 'x')
+	else if (h->spec == 'x')
 		res = handle_x(h, args);
-	else if (h->sp == 'p')
+	else if (h->spec == 'p')
 		res = handle_p(h, args);
-	else if (ft_strchr("X", h->sp))
+	else if (ft_strchr("X", h->spec))
 		res = handle_bx(h, args);
 	return (res);
 }
@@ -115,11 +115,11 @@ int			char_conversion(t_handler *h, va_list args)
 	int res;
 
 	res = 0;
-	if (h->sp == 's')
+	if (h->spec == 's')
 		res = handle_string(h, args);
-	else if (h->sp == 'c')
+	else if (h->spec == 'c')
 		res = handle_char(h, args);
-	else if (h->sp == '%' || !ft_strchr("duoxXpc%", h->sp))
+	else if (h->spec == '%' || !ft_strchr("duoxXpc%", h->spec))
 		res = handle_other(h);
 	return (res);
 }
