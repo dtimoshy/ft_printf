@@ -1,5 +1,78 @@
 #include "../inc/ft_printf.h"
 
+static int	print_prefix_x(t_handler *h)
+{
+	if (h->hash)
+	{
+		ft_putchar('0');
+		ft_putchar('x');
+		return (2);
+	}
+	return (0);
+}
+
+static int	print_precision_x(int prec, size_t value_len)
+{
+	int chars;
+
+	chars = 0;
+	while (prec-- > (int)value_len)
+	{
+		ft_putchar('0');
+		chars++;
+	}
+	return (chars);
+}
+
+static int	print_width_x(t_handler *h, size_t value_len)
+{
+	int chars;
+
+	chars = 0;
+	if (h->prec > (int)value_len)
+		value_len += h->prec - value_len;
+	value_len += h->hash * 2;
+	if (h->pad_right)
+		h->pad_zero *= 0;
+	while (h->width-- > (int)value_len)
+	{
+		if (h->pad_zero)
+			ft_putchar('0');
+		else
+			ft_putchar(' ');
+		chars++;
+	}
+	return (chars);
+}
+
+int			print_value_x(t_handler *h, char *result, size_t len)
+{
+	int printed;
+
+	printed = (int)len;
+	h->pad_zero *= h->prec == -1;
+	if (h->pad_right)
+	{
+		printed += print_prefix_x(h);
+		printed += print_precision_x(h->prec, len);
+		ft_putstr(result);
+		printed += print_width_x(h, len);
+	}
+	else
+	{
+		if (h->pad_zero)
+			printed += print_prefix_x(h);
+		printed += print_width_x(h, len);
+		if (!(h->pad_zero))
+			printed += print_prefix_x(h);
+		printed += print_precision_x(h->prec, len);
+		ft_putstr(result);
+	}
+	ft_strdel(&result);
+	return (printed);
+}
+
+
 int				handle_x(t_handler *handler, va_list args)
 {
 	char	*result;
@@ -24,6 +97,6 @@ int				handle_x(t_handler *handler, va_list args)
 	result = convert_base_opux(value, 16);
 	len = ft_strlen(result) * check_precision(handler->prec, &result);
 	handler->hash *= value != 0;
-	return (print_value(handler, result, len, false));
+	return (print_value_x(handler, result, len));
 }
 

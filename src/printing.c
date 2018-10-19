@@ -113,7 +113,7 @@ int			num_conversion(t_handler *h, va_list args)
 	else if (h->sp == 'p')
 		res = handle_p(h, args);
 	else if (ft_strchr("X", h->sp))
-		res = handle_ux(h, args);
+		res = handle_bx(h, args);
 	return (res);
 }
 
@@ -124,7 +124,7 @@ int			char_conversion(t_handler *h, va_list args)
 	res = 0;
 	if (h->sp == 's')
 		res = print_string(h, args);
-	else if (h->sp == 'c' || h->sp == '%' || !ft_strchr("duoxXpc%", h->sp))
+	else if (h->sp == 'c' || h->sp == '%' || h->sp == 'n' || !ft_strchr("duoxXpc%", h->sp))
 		res = print_char(h, args);
 	return (res);
 }

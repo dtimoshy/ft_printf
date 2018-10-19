@@ -1,17 +1,17 @@
 #include "../inc/ft_printf.h"
 
-static int	print_prefix_p(t_handler *h)
+static int	print_prefix_bx(t_handler *h)
 {
 	if (h->hash)
 	{
 		ft_putchar('0');
-		ft_putchar('x');
+		ft_putchar('X');
 		return (2);
 	}
 	return (0);
 }
 
-static int	print_precision_p(int prec, size_t value_len)
+static int	print_precision_bx(int prec, size_t value_len)
 {
 	int chars;
 
@@ -24,7 +24,7 @@ static int	print_precision_p(int prec, size_t value_len)
 	return (chars);
 }
 
-static int	print_width_p(t_handler *h, size_t value_len)
+static int	print_width_bx(t_handler *h, size_t value_len)
 {
 	int chars;
 
@@ -45,7 +45,7 @@ static int	print_width_p(t_handler *h, size_t value_len)
 	return (chars);
 }
 
-int			print_value_p(t_handler *h, char *result, size_t len)
+static int			print_value_bx(t_handler *h, char *result, size_t len)
 {
 	int printed;
 
@@ -53,26 +53,26 @@ int			print_value_p(t_handler *h, char *result, size_t len)
 	h->pad_zero *= h->prec == -1;
 	if (h->pad_right)
 	{
-		printed += print_prefix_p(h);
-		printed += print_precision_p(h->prec, len);
+		printed += print_prefix_bx(h);
+		printed += print_precision_bx(h->prec, len);
 		ft_putstr(result);
-		printed += print_width_p(h, len);
+		printed += print_width_bx(h, len);
 	}
 	else
 	{
 		if (h->pad_zero)
-			printed += print_prefix_p(h);
-		printed += print_width_p(h, len);
+			printed += print_prefix_bx(h);
+		printed += print_width_bx(h, len);
 		if (!(h->pad_zero))
-			printed += print_prefix_p(h);
-		printed += print_precision_p(h->prec, len);
+			printed += print_prefix_bx(h);
+		printed += print_precision_bx(h->prec, len);
 		ft_putstr(result);
 	}
 	ft_strdel(&result);
 	return (printed);
 }
 
-int				handle_p(t_handler *handler, va_list args)
+int				handle_bx(t_handler *handler, va_list args)
 {
 	char	*result;
 	size_t	value;
@@ -83,18 +83,18 @@ int				handle_p(t_handler *handler, va_list args)
 		value = (unsigned char)value;
 	else if (handler->length == H)
 		value = (unsigned short)value;
-	else if (handler->length == L)
-		value = (unsigned long)value;
 	else if (handler->length == LL)
 		value = (unsigned long long)value;
+	else if (handler->length == L)
+		value = (unsigned long)value;
 	else if (handler->length == J)
 		value = (uintmax_t)value;
 	else if (handler->length == Z)
 		value = (size_t)value;
 	else
 		value = (unsigned)value;
-	result = convert_base_opux(value, 16);
+	result = convert_base_bx(value, 16);
 	len = ft_strlen(result) * check_precision(handler->prec, &result);
-	handler->hash = true;
-	return (print_value_p(handler, result, len));
+	handler->hash *= value != 0;
+	return (print_value_bx(handler, result, len));
 }

@@ -25,8 +25,9 @@ handle_u.c \
 handle_o.c \
 handle_x.c \
 handle_p.c \
-handle_ux.c \
-utiles.c
+handle_bx.c \
+handle_dper.c \
+convert_bases.c
 
 
 OBJ := $(addprefix $(OBJ_DIR), $(SRC:.c=.o))

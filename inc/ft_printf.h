@@ -21,14 +21,6 @@
 # include <stdint.h>
 # include <limits.h>
 
-# define FLAG(x) ft_strchr("-+ 0#", (x))
-# define WIDTH(x) (ft_isdigit(x) || (x) == '*')
-# define PREC(x) ((x) == '.')
-# define SIZE(x) (ft_strchr("hljz", (x)))
-# define DECIMAL_BASE 10
-# define UNSIGNED_NUM 1
-# define SIGNED_NUM !UNSIGNED_NUM
-
 typedef enum	e_length
 {
 	NONE, HH, H, L, LL, J, Z
@@ -55,7 +47,8 @@ int				handle_u(t_handler *handler, va_list args);
 int				handle_o(t_handler *handler, va_list args);
 int				handle_x(t_handler *handler, va_list args);
 int				handle_p(t_handler *handler, va_list args);
-int				handle_ux(t_handler *handler, va_list args);
+int				handle_bx(t_handler *handler, va_list args);
+int				handle_dper(t_handler *handler, va_list args);
 int				print_char(t_handler *h, va_list args);
 int				print_string(t_handler *h, va_list args);
 int				print_value(t_handler *h, char *result,
@@ -63,7 +56,9 @@ int				print_value(t_handler *h, char *result,
 int				num_conversion(t_handler *h, va_list args);
 int				char_conversion(t_handler *h, va_list args);
 char			*get_wchar(wchar_t value);
+char			*convert_base_d(size_t unsgnd, int base);
 char			*convert_base_opux(size_t unsgnd, int base);
+char			*convert_base_bx(size_t unsgnd, int base);
 bool			check_precision(int prec, char **result);
 size_t			get_numlen(size_t usigned_num, int base, bool is_unsigned);
 char			*printf_strjoin(char *s1, char *s2);
