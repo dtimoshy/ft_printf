@@ -105,7 +105,7 @@ int			num_conversion(t_handler *h, va_list args)
 		res = handle_x(h, args);
 	else if (h->spec == 'p')
 		res = handle_p(h, args);
-	else if (ft_strchr("X", h->spec))
+	else if (h->spec == 'X')
 		res = handle_bx(h, args);
 	return (res);
 }
@@ -119,6 +119,8 @@ int			char_conversion(t_handler *h, va_list args)
 		res = handle_string(h, args);
 	else if (h->spec == 'c')
 		res = handle_char(h, args);
+	else if (h->spec == 'n')
+		res = handle_other(h);
 	else if (h->spec == '%' || !ft_strchr("duoxXpc%", h->spec))
 		res = handle_other(h);
 	return (res);
