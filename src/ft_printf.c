@@ -15,15 +15,15 @@
 void				parse_flags(const char **fmt, t_handler *handler)
 {
 	if ((**fmt == ' '))
-		handler->space_flag = true;
+		handler->space_flag = 1;
 	if (**fmt == '#')
-		handler->hash = true;
+		handler->hash = 1;
 	if (**fmt == '-')
-		handler->pad_right = true;
+		handler->pad_right = 1;
 	if (**fmt == '0')
-		handler->pad_zero = true;
+		handler->pad_zero = 1;
 	if (**fmt == '+')
-		handler->force_sign = true;
+		handler->force_sign = 1;
 	(*fmt)++;
 }
 
@@ -79,11 +79,11 @@ static int			convert_specifier(const char **format, va_list arg)
 	handler->width = 0;
 	handler->prec = -1;
 	handler->length = NONE;
-	handler->hash = false;
-	handler->pad_zero = false;
-	handler->force_sign = false;
-	handler->pad_right = false;
-	handler->space_flag = false;
+	handler->hash = 0;
+	handler->pad_zero = 0;
+	handler->force_sign = 0;
+	handler->pad_right = 0;
+	handler->space_flag = 0;
 	if (parse_to_handler(format, handler) == 0)
 		return (0);
 	chars_printed = num_conversion(handler, arg);

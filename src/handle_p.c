@@ -82,6 +82,6 @@ int			handle_p(t_handler *handler, va_list args)
 		value = (unsigned)value;
 	result = convert_base_opux(value, 16);
 	len = ft_strlen(result) * prec_check_print(handler->prec, 0, &result, 0);
-	handler->hash = true;
+	handler->hash = 1;
 	return (print_p(handler, result, len));
 }

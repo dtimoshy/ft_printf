@@ -119,9 +119,7 @@ int			char_conversion(t_handler *h, va_list args)
 		res = handle_string(h, args);
 	else if (h->sp == 'c')
 		res = handle_char(h, args);
-	else if (h->sp == '%')
-		res = handle_dper(h);
-	else if (!ft_strchr("duoxXpc%", h->sp))
+	else if (h->sp == '%' || !ft_strchr("duoxXpc%", h->sp))
 		res = handle_other(h);
 	return (res);
 }

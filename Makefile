@@ -23,7 +23,6 @@ handle_o.c \
 handle_x.c \
 handle_p.c \
 handle_bx.c \
-handle_dper.c \
 handle_other.c \
 handle_char.c \
 handle_string.c \

@@ -1,6 +1,6 @@
 #include "../inc/ft_printf.h"
 
-static int	print_prefix_d(t_handler *h, bool neg_sign)
+static int	print_prefix_d(t_handler *h, int neg_sign)
 {
 	if (h->force_sign)
 	{
@@ -27,7 +27,7 @@ static int	print_width_d(t_handler *h, size_t value_len)
 		value_len += h->prec - value_len;
 	value_len += (h->force_sign || h->space_flag);
 	if (h->pad_right)
-		h->pad_zero *= 0;
+		h->pad_zero = 0;
 	while (h->width-- > (int)value_len)
 	{
 		if (h->pad_zero)
@@ -39,7 +39,7 @@ static int	print_width_d(t_handler *h, size_t value_len)
 	return (chars);
 }
 
-static int	print_d(t_handler *h, char *result, size_t len, bool neg_sign)
+static int	print_d(t_handler *h, char *result, size_t len, int neg_sign)
 {
 	int printed;
 

@@ -7,7 +7,7 @@ static int		print_width_c(t_handler *h, size_t value_len)
 
 	chars = 0;
 	if (h->pad_right)
-		h->pad_zero = false;
+		h->pad_zero = 0;
 	while (h->width-- > (int)value_len)
 	{
 		if (h->pad_zero)
