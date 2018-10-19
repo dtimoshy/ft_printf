@@ -1,6 +1,6 @@
 #include "../inc/ft_printf.h"
 
-static int	print_precision_dper(int prec, size_t value_len)
+static int	print_precision_other(int prec, size_t value_len)
 {
 	int chars;
 
@@ -13,7 +13,7 @@ static int	print_precision_dper(int prec, size_t value_len)
 	return (chars);
 }
 
-static int	print_width_dper(t_handler *h, size_t value_len)
+static int	print_width_other(t_handler *h, size_t value_len)
 {
 	int chars;
 
@@ -33,28 +33,28 @@ static int	print_width_dper(t_handler *h, size_t value_len)
 	return (chars);
 }
 
-int			print_value_dper(t_handler *h, char *result, size_t len)
+int			print_value_other(t_handler *h, char *result, size_t len)
 {
 	int printed;
 
 	printed = (int)len;
 	if (h->pad_right)
 	{
-		printed += print_precision_dper(h->prec, len);
+		printed += print_precision_other(h->prec, len);
 		ft_putstr(result);
-		printed += print_width_dper(h, len);
+		printed += print_width_other(h, len);
 	}
 	else
 	{
-		printed += print_width_dper(h, len);
-		printed += print_precision_dper(h->prec, len);
+		printed += print_width_other(h, len);
+		printed += print_precision_other(h->prec, len);
 		ft_putstr(result);
 	}
 	ft_strdel(&result);
 	return (printed);
 }
 
-int					handle_dper(t_handler *handler)
+int					handle_other(t_handler *handler)
 {
 	char	*value;
 	size_t	len;
@@ -66,5 +66,5 @@ int					handle_dper(t_handler *handler)
 	else
 		len = ft_strlen(value);
 	handler->prec = -1;
-	return (print_value_dper(handler, value, len));
+	return (print_value_other(handler, value, len));
 }

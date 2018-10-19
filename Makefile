@@ -16,8 +16,6 @@ IFLAGS := -I $(INC_DIR) -I $(LIBFT_INC)
 
 SRC := \
 ft_printf.c\
-strings.c\
-chars.c\
 parsing.c\
 printing.c\
 handle_d.c \
@@ -27,6 +25,9 @@ handle_x.c \
 handle_p.c \
 handle_bx.c \
 handle_dper.c \
+handle_other.c \
+handle_char.c \
+handle_string.c \
 convert_bases.c
 
 

@@ -123,8 +123,12 @@ int			char_conversion(t_handler *h, va_list args)
 
 	res = 0;
 	if (h->sp == 's')
-		res = print_string(h, args);
-	else if (h->sp == 'c' || h->sp == '%' || h->sp == 'n' || !ft_strchr("duoxXpc%", h->sp))
-		res = print_char(h, args);
+		res = handle_string(h, args);
+	else if (h->sp == 'c')
+		res = handle_char(h, args);
+	else if (h->sp == '%')
+		res = handle_dper(h);
+	else if (!ft_strchr("duoxXpc%", h->sp))
+		res = handle_other(h);
 	return (res);
 }

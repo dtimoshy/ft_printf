@@ -48,9 +48,10 @@ int				handle_o(t_handler *handler, va_list args);
 int				handle_x(t_handler *handler, va_list args);
 int				handle_p(t_handler *handler, va_list args);
 int				handle_bx(t_handler *handler, va_list args);
-int				handle_dper(t_handler *handler, va_list args);
-int				print_char(t_handler *h, va_list args);
-int				print_string(t_handler *h, va_list args);
+int				handle_dper(t_handler *handler);
+int				handle_other(t_handler *handler);
+int				handle_char(t_handler *h, va_list args);
+int				handle_string(t_handler *h, va_list args);
 int				print_value(t_handler *h, char *result,
 							size_t len, bool neg_sign);
 int				num_conversion(t_handler *h, va_list args);

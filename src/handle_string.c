@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   strings.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: dtimoshy <dtimoshy@student.unit.ua>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/17 17:58:06 by dtimoshy          #+#    #+#             */
-/*   Updated: 2018/10/17 17:58:08 by dtimoshy         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "../inc/ft_printf.h"
 
@@ -50,7 +39,7 @@ char		*precision_cut(char *src, int prec)
 		return (src);
 }
 
-int			print_string(t_handler *h, va_list args)
+int			handle_string(t_handler *h, va_list args)
 {
 	char	*value;
 	char	*result;
