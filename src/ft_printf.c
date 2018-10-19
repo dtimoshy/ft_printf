@@ -66,8 +66,7 @@ static int			parse_to_handler(const char **fmt, t_handler *handler)
 	}
 	if (**fmt)
 		return (1);
-	else
-		return (0);
+	return (0);
 }
 
 static int			convert_specifier(const char **format, va_list arg)

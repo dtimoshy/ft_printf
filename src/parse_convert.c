@@ -17,7 +17,18 @@ void	parse_specifier(const char **fmt, t_handler *handler)
 	if (ft_strchr("DOUCSp", **fmt))
 	{
 		handler->length = L;
-		handler->spec = (char)ft_tolower(**fmt);
+		if (**fmt == 'D')
+			handler->spec = 'd';
+		else if (**fmt == 'O')
+			handler->spec = 'o';
+		else if (**fmt == 'U')
+			handler->spec = 'u';
+		else if (**fmt == 'C')
+			handler->spec = 'c';
+		else if (**fmt == 'S')
+			handler->spec = 's';
+		else
+			handler->spec = 'p';
 	}
 	else if (**fmt == 'i')
 		handler->spec = 'd';
@@ -30,14 +41,12 @@ void	parse_length(const char **fmt, t_handler *handler)
 {
 	if (**fmt == 'h' && *(*fmt + 1) == 'h')
 	{
-		if ((int)(HH - handler->length) > 0)
-			handler->length = HH;
+		handler->length = HH;
 		*fmt += 2;
 	}
 	else if (**fmt == 'l' && *(*fmt + 1) == 'l')
 	{
-		if ((int)(LL - handler->length) > 0)
-			handler->length = LL;
+		handler->length = LL;
 		*fmt += 2;
 	}
 	else if (ft_strchr("lhjz", (**fmt)))
@@ -52,13 +61,47 @@ void	parse_length(const char **fmt, t_handler *handler)
 				handler->length = LL;
 			else
 				handler->length = L;
-		else if (**fmt == 'j' && (int)(J - handler->length) > 0)
+		else if (**fmt == 'j')
 			handler->length = J;
-		else if (**fmt == 'z' && (int)(Z - handler->length) > 0)
+		else if (**fmt == 'z')
 			handler->length = Z;
 		(*fmt)++;
 	}
 }
+
+// void	parse_length(const char **fmt, t_handler *handler)
+// {
+// 	if (**fmt == 'h' && *(*fmt + 1) == 'h')
+// 	{
+// 		if ((int)(HH - handler->length) > 0)
+// 			handler->length = HH;
+// 		*fmt += 2;
+// 	}
+// 	else if (**fmt == 'l' && *(*fmt + 1) == 'l')
+// 	{
+// 		if ((int)(LL - handler->length) > 0)
+// 			handler->length = LL;
+// 		*fmt += 2;
+// 	}
+// 	else if (ft_strchr("lhjz", (**fmt)))
+// 	{
+// 		if (**fmt == 'h' && (int)(H - handler->length) >= 0)
+// 			if (handler->length == H)
+// 				handler->length = HH;
+// 			else
+// 				handler->length = H;
+// 		else if (**fmt == 'l' && (int)(L - handler->length) >= 0)
+// 			if (handler->length == L)
+// 				handler->length = LL;
+// 			else
+// 				handler->length = L;
+// 		else if (**fmt == 'j' && (int)(J - handler->length) > 0)
+// 			handler->length = J;
+// 		else if (**fmt == 'z' && (int)(Z - handler->length) > 0)
+// 			handler->length = Z;
+// 		(*fmt)++;
+// 	}
+// }
 
 /*
 void	parse_length(const char **fmt, t_handler *handler)
