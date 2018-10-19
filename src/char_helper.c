@@ -54,14 +54,17 @@ char		*get_wchar(wchar_t value)
 	return (ft_strrev((char *)ret));
 }
 
-char		*printf_strjoin(char *s1, char *s2)
+static char		*joinstr(char *s1, char *s2)
 {
-	char *ret;
+	char 	*ret;
+	size_t	temp;
 
-	if (!(s1 && s2))
-		return (NULL);
-	if ((ret = ft_strnew(ft_strlen(s1) + ft_strlen(s2))))
-		ret = ft_strcat(ft_strcat(ret, s1), s2);
+	temp = ft_strlen(s1) + ft_strlen(s2);
+	if ((ret = ft_strnew(temp)))
+	{
+		ret = ft_strcat(ret, s1);
+		ret = ft_strcat(ret, s2);
+	}
 	ft_strdel(&s1);
 	ft_strdel(&s2);
 	return (ret);
@@ -83,7 +86,9 @@ char		*get_wstr(wchar_t *value, int prec)
 			ft_strdel(&wchar);
 			return (res);
 		}
-		res = printf_strjoin(res, wchar);
+		if (!(res && wchar))
+			res = NULL;
+		res = joinstr(res, wchar);
 		value++;
 	}
 	return (res);

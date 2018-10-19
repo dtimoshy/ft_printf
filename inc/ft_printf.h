@@ -61,6 +61,5 @@ char			*convert_base_opux(size_t unsgnd, int base);
 char			*convert_base_bx(size_t unsgnd, int base);
 int				prec_check_print(int prec, size_t len, char **s, int mode);
 size_t			get_numlen(size_t usigned_num, int base, bool is_unsigned);
-char			*printf_strjoin(char *s1, char *s2);
 
 #endif
