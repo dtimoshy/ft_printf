@@ -1,18 +1,5 @@
 #include "../inc/ft_printf.h"
 
-static int	print_precision_u(int prec, size_t value_len)
-{
-	int chars;
-
-	chars = 0;
-	while (prec-- > (int)value_len)
-	{
-		ft_putchar('0');
-		chars++;
-	}
-	return (chars);
-}
-
 static int	print_width_u(t_handler *h, size_t value_len)
 {
 	int chars;
@@ -33,7 +20,7 @@ static int	print_width_u(t_handler *h, size_t value_len)
 	return (chars);
 }
 
-static int			print_value_u(t_handler *h, char *result, size_t len)
+static int	print_value_u(t_handler *h, char *result, size_t len)
 {
 	int printed;
 
@@ -41,21 +28,21 @@ static int			print_value_u(t_handler *h, char *result, size_t len)
 	h->pad_zero *= h->prec == -1;
 	if (h->pad_right)
 	{
-		printed += print_precision_u(h->prec, len);
+		printed += prec_check_print(h->prec, len, 0, 1);
 		ft_putstr(result);
 		printed += print_width_u(h, len);
 	}
 	else
 	{
 		printed += print_width_u(h, len);
-		printed += print_precision_u(h->prec, len);
+		printed += prec_check_print(h->prec, len, 0, 1);
 		ft_putstr(result);
 	}
 	ft_strdel(&result);
 	return (printed);
 }
 
-int				handle_u(t_handler *handler, va_list args)
+int			handle_u(t_handler *handler, va_list args)
 {
 	char	*result;
 	size_t	value;
@@ -77,6 +64,6 @@ int				handle_u(t_handler *handler, va_list args)
 	else
 		value = (unsigned)value;
 	result = convert_base_opux(value, 10);
-	len = ft_strlen(result) * check_precision(handler->prec, &result);
+	len = ft_strlen(result) * prec_check_print(handler->prec, 0, &result, 0);
 	return (print_value_u(handler, result, len));
 }

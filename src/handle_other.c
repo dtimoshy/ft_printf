@@ -1,18 +1,5 @@
 #include "../inc/ft_printf.h"
 
-static int	print_precision_other(int prec, size_t value_len)
-{
-	int chars;
-
-	chars = 0;
-	while (prec-- > (int)value_len)
-	{
-		ft_putchar('0');
-		chars++;
-	}
-	return (chars);
-}
-
 static int	print_width_other(t_handler *h, size_t value_len)
 {
 	int chars;
@@ -33,28 +20,28 @@ static int	print_width_other(t_handler *h, size_t value_len)
 	return (chars);
 }
 
-int			print_value_other(t_handler *h, char *result, size_t len)
+int			print_other(t_handler *h, char *result, size_t len)
 {
 	int printed;
 
 	printed = (int)len;
 	if (h->pad_right)
 	{
-		printed += print_precision_other(h->prec, len);
+		printed += prec_check_print(h->prec, len, 0, 1);
 		ft_putstr(result);
 		printed += print_width_other(h, len);
 	}
 	else
 	{
 		printed += print_width_other(h, len);
-		printed += print_precision_other(h->prec, len);
+		printed += prec_check_print(h->prec, len, 0, 1);
 		ft_putstr(result);
 	}
 	ft_strdel(&result);
 	return (printed);
 }
 
-int					handle_other(t_handler *handler)
+int			handle_other(t_handler *handler)
 {
 	char	*value;
 	size_t	len;
@@ -66,5 +53,5 @@ int					handle_other(t_handler *handler)
 	else
 		len = ft_strlen(value);
 	handler->prec = -1;
-	return (print_value_other(handler, value, len));
+	return (print_other(handler, value, len));
 }

@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   utiles.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: dtimoshy <dtimoshy@student.unit.ua>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/17 17:58:16 by dtimoshy          #+#    #+#             */
-/*   Updated: 2018/10/17 17:58:18 by dtimoshy         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "../inc/ft_printf.h"
 
@@ -86,29 +75,28 @@ char			*convert_base_opux(size_t unsgnd, int base)
 	return (ret);
 }
 
-bool			check_precision(int prec, char **result)
+int				prec_check_print(int prec, size_t len, char **s, int mode)
 {
-	if ((size_t)prec == 0 && **result == '0')
+	int chars;
+
+	if (mode == 0)
 	{
-		ft_strdel(result);
-		return (false);
+		if ((size_t)prec == 0 && **s == '0')
+		{
+			ft_strdel(s);
+			return (0);
+		}
+		return (1);
 	}
-	return (true);
-}
-
-/*
-** the same as strjoin but no leaks (accepting only malloced)
-*/
-
-char			*printf_strjoin(char *s1, char *s2)
-{
-	char *ret;
-
-	if (!(s1 && s2))
-		return (NULL);
-	if ((ret = ft_strnew(ft_strlen(s1) + ft_strlen(s2))))
-		ret = ft_strcat(ft_strcat(ret, s1), s2);
-	ft_strdel(&s1);
-	ft_strdel(&s2);
-	return (ret);
+	else if (mode == 1)
+	{
+		chars = 0;
+		while (prec-- > (int)len)
+		{
+			ft_putchar('0');
+			chars++;
+		}
+		return (chars);
+	}
+	return (0);
 }

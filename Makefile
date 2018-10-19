@@ -16,8 +16,7 @@ IFLAGS := -I $(INC_DIR) -I $(LIBFT_INC)
 
 SRC := \
 ft_printf.c\
-parsing.c\
-printing.c\
+parse_convert.c\
 handle_d.c \
 handle_u.c \
 handle_o.c \
@@ -28,7 +27,8 @@ handle_dper.c \
 handle_other.c \
 handle_char.c \
 handle_string.c \
-convert_bases.c
+num_helper.c \
+char_helper.c
 
 
 OBJ := $(addprefix $(OBJ_DIR), $(SRC:.c=.o))

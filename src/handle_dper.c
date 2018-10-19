@@ -1,18 +1,5 @@
 #include "../inc/ft_printf.h"
 
-static int	print_precision_dper(int prec, size_t value_len)
-{
-	int chars;
-
-	chars = 0;
-	while (prec-- > (int)value_len)
-	{
-		ft_putchar('0');
-		chars++;
-	}
-	return (chars);
-}
-
 static int	print_width_dper(t_handler *h, size_t value_len)
 {
 	int chars;
@@ -33,28 +20,28 @@ static int	print_width_dper(t_handler *h, size_t value_len)
 	return (chars);
 }
 
-int			print_value_dper(t_handler *h, char *result, size_t len)
+int			print_dper(t_handler *h, char *result, size_t len)
 {
 	int printed;
 
 	printed = (int)len;
 	if (h->pad_right)
 	{
-		printed += print_precision_dper(h->prec, len);
+		printed += prec_check_print(h->prec, len, 0, 1);
 		ft_putstr(result);
 		printed += print_width_dper(h, len);
 	}
 	else
 	{
 		printed += print_width_dper(h, len);
-		printed += print_precision_dper(h->prec, len);
+		printed += prec_check_print(h->prec, len, 0, 1);
 		ft_putstr(result);
 	}
 	ft_strdel(&result);
 	return (printed);
 }
 
-int					handle_dper(t_handler *handler)
+int			handle_dper(t_handler *handler)
 {
 	char	*value;
 	size_t	len;
@@ -66,5 +53,5 @@ int					handle_dper(t_handler *handler)
 	else
 		len = ft_strlen(value);
 	handler->prec = -1;
-	return (print_value_dper(handler, value, len));
+	return (print_dper(handler, value, len));
 }

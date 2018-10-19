@@ -1,16 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   printing.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dtimoshy <dtimoshy@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/17 17:57:51 by dtimoshy          #+#    #+#             */
-/*   Updated: 2018/10/17 17:57:53 by dtimoshy         ###   ########.fr       */
+/*   Created: 2018/10/17 17:57:59 by dtimoshy          #+#    #+#             */
+/*   Updated: 2018/10/17 17:58:00 by dtimoshy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/ft_printf.h"
+
+void	parse_specifier(const char **fmt, t_handler *handler)
+{
+	if (ft_strchr("DOUCSp", **fmt))
+	{
+		handler->length = L;
+		handler->sp = (char)ft_tolower(**fmt);
+	}
+	else if (**fmt == 'i')
+		handler->sp = 'd';
+	else
+		handler->sp = **fmt;
+	(*fmt)++;
+}
 
 void	parse_length(const char **fmt, t_handler *handler)
 {
@@ -76,16 +90,38 @@ void	parse_length(const char **fmt, t_handler *handler)
 }
 */
 
-void	parse_specifier(const char **fmt, t_handler *handler)
+int			num_conversion(t_handler *h, va_list args)
 {
-	if (ft_strchr("DOUCSp", **fmt))
-	{
-		handler->length = L;
-		handler->sp = (char)ft_tolower(**fmt);
-	}
-	else if (**fmt == 'i')
-		handler->sp = 'd';
-	else
-		handler->sp = **fmt;
-	(*fmt)++;
+	int res;
+
+	res = 0;
+	if (h->sp == 'd')
+		res = handle_d(h, args);
+	else if (h->sp == 'u')
+		res = handle_u(h, args);
+	else if (h->sp == 'o')
+		res = handle_o(h, args);
+	else if (h->sp == 'x')
+		res = handle_x(h, args);
+	else if (h->sp == 'p')
+		res = handle_p(h, args);
+	else if (ft_strchr("X", h->sp))
+		res = handle_bx(h, args);
+	return (res);
+}
+
+int			char_conversion(t_handler *h, va_list args)
+{
+	int res;
+
+	res = 0;
+	if (h->sp == 's')
+		res = handle_string(h, args);
+	else if (h->sp == 'c')
+		res = handle_char(h, args);
+	else if (h->sp == '%')
+		res = handle_dper(h);
+	else if (!ft_strchr("duoxXpc%", h->sp))
+		res = handle_other(h);
+	return (res);
 }

@@ -1,29 +1,48 @@
 
 #include "../inc/ft_printf.h"
 
-static char	*get_wstr(wchar_t *value, int prec)
+static int		print_width_string(t_handler *h, size_t value_len)
 {
-	char *res;
-	char *wchar;
+	int chars;
 
-	if (value == NULL)
-		return (ft_strdup("(null)"));
-	res = ft_strnew(0);
-	while (*value)
+	chars = 0;
+	if (h->prec > (int)value_len)
+		value_len += h->prec - value_len;
+	if (h->pad_right)
+		h->pad_zero = false;
+	while (h->width-- > (int)value_len)
 	{
-		wchar = get_wchar(*value);
-		if (prec != -1 && prec < (int)(ft_strlen(wchar) + ft_strlen(res)))
-		{
-			ft_strdel(&wchar);
-			break ;
-		}
-		res = printf_strjoin(res, wchar);
-		value++;
+		if (h->pad_zero)
+			ft_putchar('0');
+		else
+			ft_putchar(' ');
+		chars++;
 	}
-	return (res);
+	return (chars);
 }
 
-char		*precision_cut(char *src, int prec)
+static int		print_string(t_handler *h, char *result, size_t len)
+{
+	int printed;
+
+	printed = (int)len;
+	if (h->pad_right)
+	{
+		printed += prec_check_print(h->prec, len, 0, 1);
+		ft_putstr(result);
+		printed += print_width_string(h, len);
+	}
+	else
+	{
+		printed += print_width_string(h, len);
+		printed += prec_check_print(h->prec, len, 0, 1);
+		ft_putstr(result);
+	}
+	ft_strdel(&result);
+	return (printed);
+}
+
+static char		*precision_cut(char *src, int prec)
 {
 	char *dest;
 
@@ -39,20 +58,22 @@ char		*precision_cut(char *src, int prec)
 		return (src);
 }
 
-int			handle_string(t_handler *h, va_list args)
+int				handle_string(t_handler *h, va_list args)
 {
 	char	*value;
 	char	*result;
 
-	if (h->length == L && h->sp == 's')
-		result = get_wstr(va_arg(args, wchar_t *), h->prec);
-	else
+	if (h->length != L)
 	{
 		value = va_arg(args, char *);
-		result = ft_strdup(value == NULL ? "(null)" : value);
-	}
-	if (h->sp == 's' && h->length != L)
+		if (value == NULL)
+			result = ft_strdup("(null)");
+		else
+			result = ft_strdup(value);
 		result = precision_cut(result, h->prec);
+	}
+	else
+		result = get_wstr(va_arg(args, wchar_t *), h->prec);
 	h->prec = -1;
-	return (print_value(h, result, ft_strlen(result), false));
+	return (print_string(h, result, ft_strlen(result)));
 }

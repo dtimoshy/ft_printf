@@ -52,15 +52,14 @@ int				handle_dper(t_handler *handler);
 int				handle_other(t_handler *handler);
 int				handle_char(t_handler *h, va_list args);
 int				handle_string(t_handler *h, va_list args);
-int				print_value(t_handler *h, char *result,
-							size_t len, bool neg_sign);
 int				num_conversion(t_handler *h, va_list args);
 int				char_conversion(t_handler *h, va_list args);
 char			*get_wchar(wchar_t value);
+char			*get_wstr(wchar_t *value, int prec);
 char			*convert_base_d(size_t unsgnd, int base);
 char			*convert_base_opux(size_t unsgnd, int base);
 char			*convert_base_bx(size_t unsgnd, int base);
-bool			check_precision(int prec, char **result);
+int				prec_check_print(int prec, size_t len, char **s, int mode);
 size_t			get_numlen(size_t usigned_num, int base, bool is_unsigned);
 char			*printf_strjoin(char *s1, char *s2);
 
