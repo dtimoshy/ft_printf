@@ -12,21 +12,6 @@
 
 #include "../inc/ft_printf.h"
 
-void				parse_flags(const char **fmt, t_handler *handler)
-{
-	if ((**fmt == ' '))
-		handler->space = 1;
-	if (**fmt == '#')
-		handler->hash = 1;
-	if (**fmt == '-')
-		handler->right = 1;
-	if (**fmt == '0')
-		handler->zero = 1;
-	if (**fmt == '+')
-		handler->sign = 1;
-	(*fmt)++;
-}
-
 void				parse_precision(const char **fmt, t_handler *handler)
 {
 	if (**fmt >= '0' && **fmt <= '9')
@@ -41,12 +26,29 @@ void				parse_precision(const char **fmt, t_handler *handler)
 		handler->prec = 0;
 }
 
+void				parse_flags(const char **fmt, t_handler *handler)
+{
+		if ((**fmt == ' '))
+			handler->space = 1;
+		else if (**fmt == '#')
+			handler->hash = 1;
+		else if (**fmt == '-')
+			handler->right = 1;
+		else if (**fmt == '0')
+			handler->zero = 1;
+		else if (**fmt == '+')
+			handler->sign = 1;
+}
+
 static int			parse_to_handler(const char **fmt, t_handler *handler)
 {
 	while (ft_strchr("+- 0123456789#lhzj.", (**fmt)) && **fmt)
 	{
 		while (**fmt && ft_strchr("+- 0#", (**fmt)))
+		{
 			parse_flags(fmt, handler);
+			(*fmt)++;
+		}
 		if (**fmt >= '0' && **fmt <= '9')
 		{
 			handler->width = ft_atoi(*fmt);
@@ -63,16 +65,16 @@ static int			parse_to_handler(const char **fmt, t_handler *handler)
 			parse_length(fmt, handler);
 	}
 	if (**fmt)
-		parse_specifier(fmt, handler);
+		return (1);
 	else
 		return (0);
-	return (1);
 }
 
 static int			convert_specifier(const char **format, va_list arg)
 {
 	t_handler	*handler;
 	int			chars_printed;
+	int			temp;
 
 	handler = (t_handler *)malloc(sizeof(t_handler));
 	handler->width = 0;
@@ -83,8 +85,10 @@ static int			convert_specifier(const char **format, va_list arg)
 	handler->sign = 0;
 	handler->right = 0;
 	handler->space = 0;
-	if (parse_to_handler(format, handler) == 0)
+	temp = parse_to_handler(format, handler);
+	if (temp == 0)
 		return (0);
+	parse_specifier(format, handler);
 	chars_printed = num_conversion(handler, arg);
 	chars_printed += char_conversion(handler,arg);
 	ft_memdel((void **)&handler);
