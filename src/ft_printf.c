@@ -43,22 +43,21 @@ void				parse_precision(const char **fmt, t_handler *handler)
 
 static int			parse_to_handler(const char **fmt, t_handler *handler)
 {
-	while ((ft_isdigit(**fmt) || ft_strchr("+- 0#lhzj", (**fmt)) ||
-			**fmt == '.') && **fmt)
+	while (ft_strchr("+- 0123456789#lhzj.", (**fmt)) && **fmt)
 	{
 		while (**fmt && ft_strchr("+- 0#", (**fmt)))
 			parse_flags(fmt, handler);
-		if (**fmt && **fmt == '.')
-		{
-			++*fmt;
-			while (**fmt == '0')
-				++*fmt;
-			parse_precision(fmt, handler);
-		}
-		if (**fmt && ft_isdigit(**fmt))
+		if (**fmt >= '0' && **fmt <= '9')
 		{
 			handler->width = ft_atoi(*fmt);
 			*fmt += ft_nbrlen(handler->width);
+		}
+		if (**fmt == '.')
+		{
+			(*fmt)++;
+			while (**fmt == '0')
+				(*fmt)++;
+			parse_precision(fmt, handler);
 		}
 		if (**fmt && ft_strchr("lhjz", (**fmt)))
 			parse_length(fmt, handler);
