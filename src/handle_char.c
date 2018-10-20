@@ -1,16 +1,16 @@
 
 #include "../inc/ft_printf.h"
 
-static int		print_width_c(t_handler *h, size_t value_len)
+static int		print_wid_c(t_pf *pf, size_t len)
 {
 	int chars;
 
 	chars = 0;
-	if (h->right)
-		h->zero = 0;
-	while (h->width-- > (int)value_len)
+	if (pf->right)
+		pf->zero = 0;
+	while (pf->width-- > (int)len)
 	{
-		if (h->zero)
+		if (pf->zero)
 			ft_putchar('0');
 		else
 			ft_putchar(' ');
@@ -19,24 +19,24 @@ static int		print_width_c(t_handler *h, size_t value_len)
 	return (chars);
 }
 
-static int		print_char(t_handler *h, char *result, size_t len)
+static int		print_char(t_pf *pf, char *result, size_t len)
 {
 	int printed;
 
 	printed = (int)len;
-	if (h->right)
+	if (pf->right)
 	{
-		printed += prec_check_print(h->prec, len, 0, 1);
-		if (h->length != L)
+		printed += prec_check_print(pf->prec, len, 0, 1);
+		if (pf->length != L)
 			ft_putchar(result[0]);
 		else
 			ft_putstr(result);
-		printed += print_width_c(h, len);
+		printed += print_wid_c(pf, len);
 	}
 	else
 	{
-		printed += print_width_c(h, len);
-		printed += prec_check_print(h->prec, len, 0, 1);
+		printed += print_wid_c(pf, len);
+		printed += prec_check_print(pf->prec, len, 0, 1);
 		if (*result == '\0')
 			ft_putchar('\0');
 		else
@@ -46,22 +46,22 @@ static int		print_char(t_handler *h, char *result, size_t len)
 	return (printed);
 }
 
-int				handle_char(t_handler *handler, va_list args)
+int				handle_char(t_pf *pf, va_list args)
 {
-	char	*value;
+	char	*val;
 	size_t	len;
 
-	if (handler->length == L)
-		value = get_wchar(va_arg(args, wchar_t));
+	if (pf->length == L)
+		val = wchar_get(va_arg(args, wchar_t));
 	else
 	{
-		value = ft_strnew(1);
-		value[0] = (char)va_arg(args, int);
+		val = ft_strnew(1);
+		val[0] = (char)va_arg(args, int);
 	}
-	if (value[0] == '\0')
+	if (val[0] == '\0')
 		len = 1;
 	else
-		len = ft_strlen(value);
-	handler->prec = -1;
-	return (print_char(handler, value, len));
+		len = ft_strlen(val);
+	pf->prec = -1;
+	return (print_char(pf, val, len));
 }

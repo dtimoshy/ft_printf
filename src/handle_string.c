@@ -1,18 +1,18 @@
 
 #include "../inc/ft_printf.h"
 
-static int		print_width_string(t_handler *h, size_t value_len)
+static int		print_wid_string(t_pf *pf, size_t len)
 {
 	int chars;
 
 	chars = 0;
-	if (h->prec > (int)value_len)
-		value_len += h->prec - value_len;
-	if (h->right)
-		h->zero = 0;
-	while (h->width-- > (int)value_len)
+	if (pf->prec > (int)len)
+		len += pf->prec - len;
+	if (pf->right)
+		pf->zero = 0;
+	while (pf->width-- > (int)len)
 	{
-		if (h->zero)
+		if (pf->zero)
 			ft_putchar('0');
 		else
 			ft_putchar(' ');
@@ -21,87 +21,51 @@ static int		print_width_string(t_handler *h, size_t value_len)
 	return (chars);
 }
 
-static int		print_string(t_handler *h, char *result, size_t len)
+static int		print_string(t_pf *pf, char *result, size_t len)
 {
 	int printed;
 
 	printed = (int)len;
-	if (h->right)
+	if (pf->right)
 	{
-		printed += prec_check_print(h->prec, len, 0, 1);
+		printed += prec_check_print(pf->prec, len, 0, 1);
 		ft_putstr(result);
-		printed += print_width_string(h, len);
+		printed += print_wid_string(pf, len);
 	}
 	else
 	{
-		printed += print_width_string(h, len);
-		printed += prec_check_print(h->prec, len, 0, 1);
+		printed += print_wid_string(pf, len);
+		printed += prec_check_print(pf->prec, len, 0, 1);
 		ft_putstr(result);
 	}
 	ft_strdel(&result);
 	return (printed);
 }
 
-int				handle_string(t_handler *h, va_list args)
+int				handle_string(t_pf *pf, va_list args)
 {
-	char	*value;
+	char	*val;
 	char	*result;
 	char	*temp;
 
-	if (h->length != L)
+	if (pf->length != L)
 	{
-		value = va_arg(args, char *);
-		if (value == NULL)
+		val = va_arg(args, char *);
+		if (val == NULL)
 			result = ft_strdup("(null)");
 		else
-			result = ft_strdup(value);
-		if (h->prec >= 0 && h->prec < (int)ft_strlen(result))
+			result = ft_strdup(val);
+		if (pf->prec >= 0 && pf->prec < (int)ft_strlen(result))
 		{
-			temp = ft_strnew((size_t)h->prec);
+			temp = ft_strnew((size_t)pf->prec);
 			if (temp)
-				ft_strncpy(temp, result, (size_t)h->prec);
+				ft_strncpy(temp, result, (size_t)pf->prec);
 			ft_strdel(&result);
 			result = temp;
 		}
 	}
 	else
-		result = get_wstr(va_arg(args, wchar_t *), h->prec);
-	h->prec = -1;
-	return (print_string(h, result, ft_strlen(result)));
+		result = wstr_get(va_arg(args, wchar_t *), pf->prec);
+	pf->prec = -1;
+	return (print_string(pf, result, ft_strlen(result)));
 }
-
-// static char		*precision_cut(char *src, int prec)
-// {
-// 	char *dest;
-
-// 	if (prec >= 0 && prec < (int)ft_strlen(src))
-// 	{
-// 		dest = ft_strnew((size_t)prec);
-// 		if (dest)
-// 			ft_strncpy(dest, src, (size_t)prec);
-// 		ft_strdel(&src);
-// 		return (dest);
-// 	}
-// 	else
-// 		return (src);
-// }
-
-// int				handle_string(t_handler *h, va_list args)
-// {
-// 	char	*value;
-// 	char	*result;
-
-// 	if (h->length != L)
-// 	{
-// 		value = va_arg(args, char *);
-// 		if (value == NULL)
-// 			result = ft_strdup("(null)");
-// 		else
-// 			result = ft_strdup(value);
-// 		result = precision_cut(result, h->prec);
-// 	}
-// 	else
-// 		result = get_wstr(va_arg(args, wchar_t *), h->prec);
-// 	h->prec = -1;
-// 	return (print_string(h, result, ft_strlen(result)));
-// }

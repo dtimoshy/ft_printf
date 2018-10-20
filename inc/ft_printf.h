@@ -20,44 +20,46 @@
 # include <stdint.h>
 # include <limits.h>
 
-typedef enum	e_length
-{
-	NONE, HH, H, L, LL, J, Z
-}				t_length;
+# define NO 0
+# define HH 1
+# define H 2
+# define L 3
+# define LL 4
+# define J 5
+# define Z 6
 
-typedef struct	s_handler
+typedef struct	s_pf
 {
-	int			right;
-	int			zero;
-	int			sign;
-	int			space;
-	int			hash;
+	short		right;
+	short		zero;
+	short		sign;
+	short		space;
+	short		hash;
+	short		length;
 	int			width;
 	int			prec;
-	t_length	length;
 	char		spec;
-}				t_handler;
+}				t_pf;
 
 int				ft_printf(const char *format, ...);
-void			parse_length(const char **fmt, t_handler *handler);
-void			parse_specifier(const char **fmt, t_handler *handler);
-int				handle_d(t_handler *h, va_list args);
-int				handle_u(t_handler *handler, va_list args);
-int				handle_o(t_handler *handler, va_list args);
-int				handle_x(t_handler *handler, va_list args);
-int				handle_p(t_handler *handler, va_list args);
-int				handle_bx(t_handler *handler, va_list args);
-int				handle_other(t_handler *handler);
-int				handle_char(t_handler *h, va_list args);
-int				handle_string(t_handler *h, va_list args);
-int				num_conversion(t_handler *h, va_list args);
-int				char_conversion(t_handler *h, va_list args);
-char			*get_wchar(wchar_t value);
-char			*get_wstr(wchar_t *value, int prec);
+void			len_parse(const char **fmt, t_pf *pf);
+void			spec_parse(const char **fmt, t_pf *pf);
+int				handle_d(t_pf *pf, va_list args);
+int				handle_u(t_pf *pf, va_list args);
+int				handle_o(t_pf *pf, va_list args);
+int				handle_x(t_pf *pf, va_list args);
+int				handle_p(t_pf *pf, va_list args);
+int				handle_bx(t_pf *pf, va_list args);
+int				handle_other(t_pf *pf);
+int				handle_char(t_pf *pf, va_list args);
+int				handle_string(t_pf *pf, va_list args);
+int				num_convert(t_pf *pf, va_list args);
+int				char_convert(t_pf *pf, va_list args);
+char			*wchar_get(wchar_t value);
+char			*wstr_get(wchar_t *value, int prec);
 char			*convert_base_d(size_t unsgnd, int base);
 char			*convert_base_opux(size_t unsgnd, int base);
 char			*convert_base_bx(size_t unsgnd, int base);
 int				prec_check_print(int prec, size_t len, char **s, int mode);
-size_t			get_numlen(size_t usigned_num, int base, int is_unsigned);
 
 #endif

@@ -1,8 +1,8 @@
 #include "../inc/ft_printf.h"
 
-static int		print_prefix_bx(t_handler *h)
+static int		print_pref_bx(t_pf *pf)
 {
-	if (h->hash)
+	if (pf->hash)
 	{
 		ft_putchar('0');
 		ft_putchar('X');
@@ -11,19 +11,19 @@ static int		print_prefix_bx(t_handler *h)
 	return (0);
 }
 
-static int		print_width_bx(t_handler *h, size_t value_len)
+static int		print_wid_bx(t_pf *pf, size_t value_len)
 {
 	int chars;
 
 	chars = 0;
-	if (h->prec > (int)value_len)
-		value_len += h->prec - value_len;
-	value_len += h->hash * 2;
-	if (h->right)
-		h->zero *= 0;
-	while (h->width-- > (int)value_len)
+	if (pf->prec > (int)value_len)
+		value_len += pf->prec - value_len;
+	value_len += pf->hash * 2;
+	if (pf->right)
+		pf->zero *= 0;
+	while (pf->width-- > (int)value_len)
 	{
-		if (h->zero)
+		if (pf->zero)
 			ft_putchar('0');
 		else
 			ft_putchar(' ');
@@ -32,56 +32,56 @@ static int		print_width_bx(t_handler *h, size_t value_len)
 	return (chars);
 }
 
-static int		print_bx(t_handler *h, char *result, size_t len)
+static int		print_bx(t_pf *pf, char *result, size_t len)
 {
 	int printed;
 
 	printed = (int)len;
-	h->zero *= h->prec == -1;
-	if (h->right)
+	pf->zero *= pf->prec == -1;
+	if (pf->right)
 	{
-		printed += print_prefix_bx(h);
-		printed += prec_check_print(h->prec, len, 0, 1);
+		printed += print_pref_bx(pf);
+		printed += prec_check_print(pf->prec, len, 0, 1);
 		ft_putstr(result);
-		printed += print_width_bx(h, len);
+		printed += print_wid_bx(pf, len);
 	}
 	else
 	{
-		if (h->zero)
-			printed += print_prefix_bx(h);
-		printed += print_width_bx(h, len);
-		if (!(h->zero))
-			printed += print_prefix_bx(h);
-		printed += prec_check_print(h->prec, len, 0, 1);
+		if (pf->zero)
+			printed += print_pref_bx(pf);
+		printed += print_wid_bx(pf, len);
+		if (!(pf->zero))
+			printed += print_pref_bx(pf);
+		printed += prec_check_print(pf->prec, len, 0, 1);
 		ft_putstr(result);
 	}
 	ft_strdel(&result);
 	return (printed);
 }
 
-int				handle_bx(t_handler *handler, va_list args)
+int				handle_bx(t_pf *pf, va_list args)
 {
 	char	*result;
 	size_t	value;
 	size_t	len;
 
 	value = va_arg(args, size_t);
-	if (handler->length == HH)
+	if (pf->length == HH)
 		value = (unsigned char)value;
-	else if (handler->length == H)
+	else if (pf->length == H)
 		value = (unsigned short)value;
-	else if (handler->length == LL)
+	else if (pf->length == LL)
 		value = (unsigned long long)value;
-	else if (handler->length == L)
+	else if (pf->length == L)
 		value = (unsigned long)value;
-	else if (handler->length == J)
+	else if (pf->length == J)
 		value = (uintmax_t)value;
-	else if (handler->length == Z)
+	else if (pf->length == Z)
 		value = (size_t)value;
 	else
 		value = (unsigned)value;
 	result = convert_base_bx(value, 16);
-	len = ft_strlen(result) * prec_check_print(handler->prec, 0, &result, 0);
-	handler->hash *= value != 0;
-	return (print_bx(handler, result, len));
+	len = ft_strlen(result) * prec_check_print(pf->prec, 0, &result, 0);
+	pf->hash *= value != 0;
+	return (print_bx(pf, result, len));
 }

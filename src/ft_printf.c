@@ -12,41 +12,41 @@
 
 #include "../inc/ft_printf.h"
 
-void				parse_precision(const char **fmt, t_handler *handler)
+void				prec_parse(const char **fmt, t_pf *pf)
 {
 	if (**fmt >= '0' && **fmt <= '9')
 	{
-		handler->prec = ft_atoi(*fmt);
-		if (handler->prec < 0)
-			*fmt += ft_nbrlen(handler->prec) + 1;
+		pf->prec = ft_atoi(*fmt);
+		if (pf->prec < 0)
+			*fmt += ft_nbrlen(pf->prec) + 1;
 		else
-			*fmt += ft_nbrlen(handler->prec);
+			*fmt += ft_nbrlen(pf->prec);
 	}
 	else
-		handler->prec = 0;
+		pf->prec = 0;
 }
 
-void				parse_flags(const char **fmt, t_handler *handler)
+void				flag_parse(const char **fmt, t_pf *pf)
 {
 		if ((**fmt == ' '))
-			handler->space = 1;
+			pf->space = 1;
 		else if (**fmt == '#')
-			handler->hash = 1;
+			pf->hash = 1;
 		else if (**fmt == '-')
-			handler->right = 1;
+			pf->right = 1;
 		else if (**fmt == '0')
-			handler->zero = 1;
+			pf->zero = 1;
 		else if (**fmt == '+')
-			handler->sign = 1;
+			pf->sign = 1;
 }
 
-static int			parse_to_handler(const char **fmt, t_handler *handler)
+static int			parse_to_pf(const char **fmt, t_pf *pf)
 {
 	while (ft_strchr("+- 0123456789#lhzj.", (**fmt)) && **fmt)
 	{
 		while (**fmt && ft_strchr("+- 0#", (**fmt)))
 		{
-			parse_flags(fmt, handler);
+			flag_parse(fmt, pf);
 			(*fmt)++;
 		}
 		if (**fmt == '.')
@@ -54,44 +54,44 @@ static int			parse_to_handler(const char **fmt, t_handler *handler)
 			(*fmt)++;
 			while (**fmt == '0')
 				(*fmt)++;
-			parse_precision(fmt, handler);
+			prec_parse(fmt, pf);
 		}
 		if (**fmt >= '0' && **fmt <= '9')
 		{
-			handler->width = ft_atoi(*fmt);
-			*fmt += ft_nbrlen(handler->width);
+			pf->width = ft_atoi(*fmt);
+			*fmt += ft_nbrlen(pf->width);
 		}
 		if (**fmt && ft_strchr("lhjz", (**fmt)))
-			parse_length(fmt, handler);
+			len_parse(fmt, pf);
 	}
 	if (**fmt)
 		return (1);
 	return (0);
 }
 
-static int			convert_specifier(const char **format, va_list arg)
+static int			manage_spec(const char **format, va_list arg)
 {
-	t_handler	*handler;
-	int			chars_printed;
+	t_pf	*pf;
+	int			count;
 	int			temp;
 
-	handler = (t_handler *)malloc(sizeof(t_handler));
-	handler->width = 0;
-	handler->prec = -1;
-	handler->length = NONE;
-	handler->hash = 0;
-	handler->zero = 0;
-	handler->sign = 0;
-	handler->right = 0;
-	handler->space = 0;
-	temp = parse_to_handler(format, handler);
+	pf = (t_pf *)malloc(sizeof(t_pf));
+	pf->hash = 0;
+	pf->zero = 0;
+	pf->sign = 0;
+	pf->right = 0;
+	pf->space = 0;
+	pf->width = 0;
+	pf->prec = -1;
+	pf->length = NO;
+	temp = parse_to_pf(format, pf);
 	if (temp == 0)
 		return (0);
-	parse_specifier(format, handler);
-	chars_printed = num_conversion(handler, arg);
-	chars_printed += char_conversion(handler,arg);
-	ft_memdel((void **)&handler);
-	return (chars_printed);
+	spec_parse(format, pf);
+	count = num_convert(pf, arg);
+	count += char_convert(pf,arg);
+	ft_memdel((void **)&pf);
+	return (count);
 }
 
 int					ft_printf(const char *format, ...)
@@ -102,16 +102,17 @@ int					ft_printf(const char *format, ...)
 	result = 0;
 	va_start(arg, format);
 	while (*format)
-		if (*format == '%')
-		{
-			++format;
-			result = result + convert_specifier(&format, arg);
-		}
-		else
+		if (*format != '%')
 		{
 			ft_putchar(*format);
 			result++;
 			format++;
+
+		}
+		else
+		{
+			++format;
+			result = result + manage_spec(&format, arg);
 		}
 	va_end(arg);
 	return (result);

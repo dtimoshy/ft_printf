@@ -12,183 +12,87 @@
 
 #include "../inc/ft_printf.h"
 
-void	parse_specifier(const char **fmt, t_handler *handler)
+void	spec_parse(const char **fmt, t_pf *pf)
 {
 	if (ft_strchr("DOUCSp", **fmt))
 	{
-		handler->length = L;
+		pf->length = L;
 		if (**fmt == 'D')
-			handler->spec = 'd';
+			pf->spec = 'd';
 		else if (**fmt == 'O')
-			handler->spec = 'o';
+			pf->spec = 'o';
 		else if (**fmt == 'U')
-			handler->spec = 'u';
+			pf->spec = 'u';
 		else if (**fmt == 'C')
-			handler->spec = 'c';
+			pf->spec = 'c';
 		else if (**fmt == 'S')
-			handler->spec = 's';
+			pf->spec = 's';
 		else
-			handler->spec = 'p';
+			pf->spec = 'p';
 	}
 	else if (**fmt == 'i')
-		handler->spec = 'd';
+		pf->spec = 'd';
 	else
-		handler->spec = **fmt;
+		pf->spec = **fmt;
 	(*fmt)++;
 }
 
-void	parse_length(const char **fmt, t_handler *handler)
+void	len_parse(const char **fmt, t_pf *pf)
 {
 	if (**fmt == 'h' && *(*fmt + 1) == 'h')
 	{
-		handler->length = HH;
+		pf->length = HH;
 		*fmt += 2;
 	}
 	else if (**fmt == 'l' && *(*fmt + 1) == 'l')
 	{
-		handler->length = LL;
+		pf->length = LL;
 		*fmt += 2;
 	}
 	else if (ft_strchr("lhjz", (**fmt)))
 	{
-		if (**fmt == 'h' && (int)(H - handler->length) >= 0)
-				handler->length = H;
-		else if (**fmt == 'l' && (int)(L - handler->length) >= 0)
-				handler->length = L;
+		if (**fmt == 'h' && (H - pf->length) >= 0)
+				pf->length = H;
+		else if (**fmt == 'l' && (L - pf->length) >= 0)
+				pf->length = L;
 		else if (**fmt == 'j')
-			handler->length = J;
+			pf->length = J;
 		else if (**fmt == 'z')
-			handler->length = Z;
+			pf->length = Z;
 		(*fmt)++;
 	}
 }
 
-// void	parse_length(const char **fmt, t_handler *handler)
-// {
-// 	if (**fmt == 'h' && *(*fmt + 1) == 'h')
-// 	{
-// 		handler->length = HH;
-// 		*fmt += 2;
-// 	}
-// 	else if (**fmt == 'l' && *(*fmt + 1) == 'l')
-// 	{
-// 		handler->length = LL;
-// 		*fmt += 2;
-// 	}
-// 	else if (ft_strchr("lhjz", (**fmt)))
-// 	{
-// 		if (**fmt == 'h' && (int)(H - handler->length) >= 0)
-// 			if (handler->length == H)
-// 				handler->length = HH;
-// 			else
-// 				handler->length = H;
-// 		else if (**fmt == 'l' && (int)(L - handler->length) >= 0)
-// 			if (handler->length == L)
-// 				handler->length = LL;
-// 			else
-// 				handler->length = L;
-// 		else if (**fmt == 'j')
-// 			handler->length = J;
-// 		else if (**fmt == 'z')
-// 			handler->length = Z;
-// 		(*fmt)++;
-// 	}
-// }
-
-// void	parse_length(const char **fmt, t_handler *handler)
-// {
-// 	if (**fmt == 'h' && *(*fmt + 1) == 'h')
-// 	{
-// 		if ((int)(HH - handler->length) > 0)
-// 			handler->length = HH;
-// 		*fmt += 2;
-// 	}
-// 	else if (**fmt == 'l' && *(*fmt + 1) == 'l')
-// 	{
-// 		if ((int)(LL - handler->length) > 0)
-// 			handler->length = LL;
-// 		*fmt += 2;
-// 	}
-// 	else if (ft_strchr("lhjz", (**fmt)))
-// 	{
-// 		if (**fmt == 'h' && (int)(H - handler->length) >= 0)
-// 			if (handler->length == H)
-// 				handler->length = HH;
-// 			else
-// 				handler->length = H;
-// 		else if (**fmt == 'l' && (int)(L - handler->length) >= 0)
-// 			if (handler->length == L)
-// 				handler->length = LL;
-// 			else
-// 				handler->length = L;
-// 		else if (**fmt == 'j' && (int)(J - handler->length) > 0)
-// 			handler->length = J;
-// 		else if (**fmt == 'z' && (int)(Z - handler->length) > 0)
-// 			handler->length = Z;
-// 		(*fmt)++;
-// 	}
-// }
-
-/*
-void	parse_length(const char **fmt, t_handler *handler)
-{
-	if (**fmt == 'h' && *(*fmt + 1) == 'h')
-	{
-		if ((int)(HH - handler->length) > 0)
-			handler->length = HH;
-		*fmt += 2;
-	}
-	else if (**fmt == 'l' && *(*fmt + 1) == 'l')
-	{
-		if ((int)(LL - handler->length) > 0)
-			handler->length = LL;
-		*fmt += 2;
-	}
-	else if (SIZE(**fmt))
-	{
-		if (**fmt == 'h' && (int)(H - handler->length) >= 0)
-			handler->length = handler->length == H ? HH : H;
-		else if (**fmt == 'l' && (int)(L - handler->length) >= 0)
-			handler->length = handler->length == L ? LL : L;
-		else if (**fmt == 'j' && (int)(J - handler->length) > 0)
-			handler->length = J;
-		else if (**fmt == 'z' && (int)(Z - handler->length) > 0)
-			handler->length = Z;
-		(*fmt)++;
-	}
-}
-*/
-
-int			num_conversion(t_handler *h, va_list args)
+int			num_convert(t_pf *pf, va_list args)
 {
 	int res;
 
 	res = 0;
-	if (h->spec == 'd')
-		res = handle_d(h, args);
-	else if (h->spec == 'u')
-		res = handle_u(h, args);
-	else if (h->spec == 'o')
-		res = handle_o(h, args);
-	else if (h->spec == 'x')
-		res = handle_x(h, args);
-	else if (h->spec == 'p')
-		res = handle_p(h, args);
-	else if (h->spec == 'X')
-		res = handle_bx(h, args);
+	if (pf->spec == 'd')
+		res = handle_d(pf, args);
+	else if (pf->spec == 'u')
+		res = handle_u(pf, args);
+	else if (pf->spec == 'o')
+		res = handle_o(pf, args);
+	else if (pf->spec == 'x')
+		res = handle_x(pf, args);
+	else if (pf->spec == 'p')
+		res = handle_p(pf, args);
+	else if (pf->spec == 'X')
+		res = handle_bx(pf, args);
 	return (res);
 }
 
-int			char_conversion(t_handler *h, va_list args)
+int			char_convert(t_pf *pf, va_list args)
 {
 	int res;
 
 	res = 0;
-	if (h->spec == 's')
-		res = handle_string(h, args);
-	else if (h->spec == 'c')
-		res = handle_char(h, args);
-	else if (h->spec == '%' || !ft_strchr("duoxXpc%", h->spec))
-		res = handle_other(h);
+	if (pf->spec == 's')
+		res = handle_string(pf, args);
+	else if (pf->spec == 'c')
+		res = handle_char(pf, args);
+	else if (pf->spec == '%' || !ft_strchr("duoxXpc%", pf->spec))
+		res = handle_other(pf);
 	return (res);
 }

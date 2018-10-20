@@ -1,17 +1,17 @@
 #include "../inc/ft_printf.h"
 
-static int	print_width_other(t_handler *h, size_t value_len)
+static int	print_wid_other(t_pf *pf, size_t value_len)
 {
 	int chars;
 
 	chars = 0;
-	if (h->prec > (int)value_len)
-		value_len += h->prec - value_len;
-	if (h->right)
-		h->zero = 0;
-	while (h->width-- > (int)value_len)
+	if (pf->prec > (int)value_len)
+		value_len += pf->prec - value_len;
+	if (pf->right)
+		pf->zero = 0;
+	while (pf->width-- > (int)value_len)
 	{
-		if (h->zero)
+		if (pf->zero)
 			ft_putchar('0');
 		else
 			ft_putchar(' ');
@@ -20,38 +20,38 @@ static int	print_width_other(t_handler *h, size_t value_len)
 	return (chars);
 }
 
-int			print_other(t_handler *h, char *result, size_t len)
+int			print_other(t_pf *pf, char *result, size_t len)
 {
 	int printed;
 
 	printed = (int)len;
-	if (h->right)
+	if (pf->right)
 	{
-		printed += prec_check_print(h->prec, len, 0, 1);
+		printed += prec_check_print(pf->prec, len, 0, 1);
 		ft_putstr(result);
-		printed += print_width_other(h, len);
+		printed += print_wid_other(pf, len);
 	}
 	else
 	{
-		printed += print_width_other(h, len);
-		printed += prec_check_print(h->prec, len, 0, 1);
+		printed += print_wid_other(pf, len);
+		printed += prec_check_print(pf->prec, len, 0, 1);
 		ft_putstr(result);
 	}
 	ft_strdel(&result);
 	return (printed);
 }
 
-int			handle_other(t_handler *handler)
+int			handle_other(t_pf *pf)
 {
 	char	*value;
 	size_t	len;
 
 	value = ft_strnew(1);
-	value[0] = handler->spec;
+	value[0] = pf->spec;
 	if (value[0] == '\0')
 		len = 1;
 	else
 		len = ft_strlen(value);
-	handler->prec = -1;
-	return (print_other(handler, value, len));
+	pf->prec = -1;
+	return (print_other(pf, value, len));
 }

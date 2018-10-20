@@ -1,8 +1,8 @@
 #include "../inc/ft_printf.h"
 
-static int	print_prefix_d(t_handler *h, int neg_sign)
+static int	print_pref_d(t_pf *pf, int neg_sign)
 {
-	if (h->sign)
+	if (pf->sign)
 	{
 		if (neg_sign)
 			ft_putchar('-');
@@ -10,7 +10,7 @@ static int	print_prefix_d(t_handler *h, int neg_sign)
 			ft_putchar('+');
 		return (1);
 	}
-	else if (h->space)
+	else if (pf->space)
 	{
 		ft_putchar(' ');
 		return (1);
@@ -18,19 +18,19 @@ static int	print_prefix_d(t_handler *h, int neg_sign)
 	return (0);
 }
 
-static int	print_width_d(t_handler *h, size_t value_len)
+static int	print_wid_d(t_pf *pf, size_t value_len)
 {
 	int chars;
 
 	chars = 0;
-	if (h->prec > (int)value_len)
-		value_len += h->prec - value_len;
-	value_len += (h->sign || h->space);
-	if (h->right)
-		h->zero = 0;
-	while (h->width-- > (int)value_len)
+	if (pf->prec > (int)value_len)
+		value_len += pf->prec - value_len;
+	value_len += (pf->sign || pf->space);
+	if (pf->right)
+		pf->zero = 0;
+	while (pf->width-- > (int)value_len)
 	{
-		if (h->zero)
+		if (pf->zero)
 			ft_putchar('0');
 		else
 			ft_putchar(' ');
@@ -39,56 +39,56 @@ static int	print_width_d(t_handler *h, size_t value_len)
 	return (chars);
 }
 
-static int	print_d(t_handler *h, char *result, size_t len, int neg_sign)
+static int	print_d(t_pf *pf, char *result, size_t len, int neg_sign)
 {
 	int printed;
 
 	printed = (int)len;
-	h->zero *= h->prec == -1;
-	if (h->right)
+	pf->zero *= pf->prec == -1;
+	if (pf->right)
 	{
-		printed += print_prefix_d(h, neg_sign);
-		printed += prec_check_print(h->prec, len, 0, 1);
+		printed += print_pref_d(pf, neg_sign);
+		printed += prec_check_print(pf->prec, len, 0, 1);
 		ft_putstr(result);
-		printed += print_width_d(h, len);
+		printed += print_wid_d(pf, len);
 	}
 	else
 	{
-		if (h->zero)
-			printed += print_prefix_d(h, neg_sign);
-		printed += print_width_d(h, len);
-		if (!(h->zero))
-			printed += print_prefix_d(h, neg_sign);
-		printed += prec_check_print(h->prec, len, 0, 1);
+		if (pf->zero)
+			printed += print_pref_d(pf, neg_sign);
+		printed += print_wid_d(pf, len);
+		if (!(pf->zero))
+			printed += print_pref_d(pf, neg_sign);
+		printed += prec_check_print(pf->prec, len, 0, 1);
 		ft_putstr(result);
 	}
 	ft_strdel(&result);
 	return (printed);
 }
 
-int			handle_d(t_handler *h, va_list args)
+int			handle_d(t_pf *pf, va_list args)
 {
 	char		*result;
 	ssize_t		value;
 	size_t		len;
 
 	value = (va_arg(args, ssize_t));
-	if (h->length == HH)
+	if (pf->length == HH)
 		value = (signed char)value;
-	else if (h->length == H)
+	else if (pf->length == H)
 		value = (short)value;
-	else if (h->length == L)
+	else if (pf->length == L)
 		value = (long)value;
-	else if (h->length == LL)
+	else if (pf->length == LL)
 		value = (long long)value;
-	else if (h->length == J)
+	else if (pf->length == J)
 		value = (intmax_t)value;
-	else if (h->length == Z)
+	else if (pf->length == Z)
 		value = (ssize_t)value;
 	else
 		value = (int)value;
 	result = convert_base_d((size_t)value, 10);
-	len = ft_strlen(result) * prec_check_print(h->prec, 0, &result, 0);
-	h->sign = h->sign || value < 0;
-	return (print_d(h, result, len, value < 0));
+	len = ft_strlen(result) * prec_check_print(pf->prec, 0, &result, 0);
+	pf->sign = pf->sign || value < 0;
+	return (print_d(pf, result, len, value < 0));
 }
