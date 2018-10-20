@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   handle_d.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dtimoshy <dtimoshy@student.unit.ua>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/10/20 13:33:27 by dtimoshy          #+#    #+#             */
+/*   Updated: 2018/10/20 13:33:29 by dtimoshy         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../inc/ft_printf.h"
 
 static int	print_pref_d(t_pf *pf, int neg_sign)
@@ -41,29 +53,29 @@ static int	print_wid_d(t_pf *pf, size_t value_len)
 
 static int	print_d(t_pf *pf, char *result, size_t len, int neg_sign)
 {
-	int printed;
+	int chars;
 
-	printed = (int)len;
+	chars = (int)len;
 	pf->zero *= pf->prec == -1;
 	if (pf->right)
 	{
-		printed += print_pref_d(pf, neg_sign);
-		printed += prec_check_print(pf->prec, len, 0, 1);
+		chars += print_pref_d(pf, neg_sign);
+		chars += prec_check_print(pf->prec, len, 0, 1);
 		ft_putstr(result);
-		printed += print_wid_d(pf, len);
+		chars += print_wid_d(pf, len);
 	}
 	else
 	{
 		if (pf->zero)
-			printed += print_pref_d(pf, neg_sign);
-		printed += print_wid_d(pf, len);
+			chars += print_pref_d(pf, neg_sign);
+		chars += print_wid_d(pf, len);
 		if (!(pf->zero))
-			printed += print_pref_d(pf, neg_sign);
-		printed += prec_check_print(pf->prec, len, 0, 1);
+			chars += print_pref_d(pf, neg_sign);
+		chars += prec_check_print(pf->prec, len, 0, 1);
 		ft_putstr(result);
 	}
 	ft_strdel(&result);
-	return (printed);
+	return (chars);
 }
 
 int			handle_d(t_pf *pf, va_list args)
@@ -73,17 +85,17 @@ int			handle_d(t_pf *pf, va_list args)
 	size_t		len;
 
 	value = (va_arg(args, ssize_t));
-	if (pf->length == HH)
+	if (pf->len == HH)
 		value = (signed char)value;
-	else if (pf->length == H)
+	else if (pf->len == H)
 		value = (short)value;
-	else if (pf->length == L)
+	else if (pf->len == L)
 		value = (long)value;
-	else if (pf->length == LL)
+	else if (pf->len == LL)
 		value = (long long)value;
-	else if (pf->length == J)
+	else if (pf->len == J)
 		value = (intmax_t)value;
-	else if (pf->length == Z)
+	else if (pf->len == Z)
 		value = (ssize_t)value;
 	else
 		value = (int)value;

@@ -1,76 +1,87 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   num_helper.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dtimoshy <dtimoshy@student.unit.ua>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/10/20 13:34:34 by dtimoshy          #+#    #+#             */
+/*   Updated: 2018/10/20 13:34:35 by dtimoshy         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../inc/ft_printf.h"
 
-char			*convert_base_bx(size_t unsgnd, int base)
+char			*convert_base_bx(size_t nbr, int base)
 {
 	char	*ret;
 	size_t	len;
-	size_t 	base_temp;
-	size_t	unsgnd_temp;
+	size_t	base_temp;
+	size_t	temp;
 
-	unsgnd_temp = unsgnd;
+	temp = nbr;
 	base_temp = (size_t)base;
 	len = 1;
-	while (unsgnd_temp /= base_temp)
+	while (temp /= base_temp)
 		len++;
 	if (!(ret = ft_strnew(len + 1)))
 		return (NULL);
 	while (len--)
 	{
-		if (unsgnd % base < 10)
-			ret[len] = (char)(unsgnd % base + '0');
+		if (nbr % base < 10)
+			ret[len] = (char)(nbr % base + '0');
 		else
-			ret[len] = (char)(unsgnd% base + ('A' - 10));
-		unsgnd /= base;
+			ret[len] = (char)(nbr % base + ('A' - 10));
+		nbr /= base;
 	}
 	return (ret);
 }
 
-char			*convert_base_d(size_t unsgnd, int base)
+char			*convert_base_d(size_t nbr, int base)
 {
 	char	*ret;
 	size_t	len;
-	ssize_t	sgnd;
-	ssize_t num_temp;
+	ssize_t	snbr;
+	ssize_t temp;
 	ssize_t	base_temp;
 
-	num_temp = (ssize_t)unsgnd;
+	temp = (ssize_t)nbr;
 	base_temp = (ssize_t)base;
 	len = 1;
-	while (num_temp /= base)
+	while (temp /= base)
 		len++;
 	if (!(ret = ft_strnew(len + 1)))
 		return (NULL);
-	sgnd = (ssize_t)unsgnd;
+	snbr = (ssize_t)nbr;
 	while (len--)
-		{
-			ret[len] = (char)(ft_abs(sgnd % base) + '0');
-			sgnd /= base;
-		}
+	{
+		ret[len] = (char)(ft_abs(snbr % base) + '0');
+		snbr /= base;
+	}
 	return (ret);
 }
 
-char			*convert_base_opux(size_t unsgnd, int base)
+char			*convert_base_opux(size_t nbr, int base)
 {
 	char	*ret;
 	size_t	len;
-	size_t 	base_temp;
-	size_t	unsgnd_temp;
+	size_t	base_temp;
+	size_t	temp;
 
-	unsgnd_temp = unsgnd;
+	temp = nbr;
 	base_temp = (size_t)base;
 	len = 1;
-	while (unsgnd_temp /= base_temp)
+	while (temp /= base_temp)
 		len++;
 	if (!(ret = ft_strnew(len + 1)))
 		return (NULL);
 	while (len--)
 	{
-		if (unsgnd % base < 10)
-			ret[len] = (char)(unsgnd % base + '0');
+		if (nbr % base < 10)
+			ret[len] = (char)(nbr % base + '0');
 		else
-			ret[len] = (char)(unsgnd% base + ('a' - 10));
-		unsgnd /= base;
+			ret[len] = (char)(nbr % base + ('a' - 10));
+		nbr /= base;
 	}
 	return (ret);
 }

@@ -1,31 +1,42 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   char_helper.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dtimoshy <dtimoshy@student.unit.ua>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/10/20 13:32:38 by dtimoshy          #+#    #+#             */
+/*   Updated: 2018/10/20 13:32:41 by dtimoshy         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../inc/ft_printf.h"
 
-static int	count_bytes(wchar_t val)
+static int		count_bytes(wchar_t val)
 {
-	int res;
+	int count;
 	int temp;
 
 	temp = (int)val;
 	if (temp == 0)
 		return (1);
-	res = 0;
+	count = 0;
 	while (temp)
 	{
 		temp /= 2;
-		res++;
+		count++;
 	}
-	if (res > 16 && MB_CUR_MAX >= 4)
+	if (count > 16 && MB_CUR_MAX >= 4)
 		return (4);
-	else if (res > 11 && res <= 16 && MB_CUR_MAX >= 3)
+	else if (count > 11 && count <= 16 && MB_CUR_MAX >= 3)
 		return (3);
-	else if(res > 7 && res <= 11 && MB_CUR_MAX >= 2)
+	else if (count > 7 && count <= 11 && MB_CUR_MAX >= 2)
 		return (2);
 	else
 		return (1);
 }
 
-char		*wchar_get(wchar_t val)
+char			*wchar_get(wchar_t val)
 {
 	char	*ret;
 	int		bytes;
@@ -56,7 +67,7 @@ char		*wchar_get(wchar_t val)
 
 static char		*joinstr(char *s1, char *s2)
 {
-	char 	*result;
+	char	*result;
 	size_t	temp;
 
 	temp = ft_strlen(s1) + ft_strlen(s2);
@@ -70,7 +81,7 @@ static char		*joinstr(char *s1, char *s2)
 	return (result);
 }
 
-char		*wstr_get(wchar_t *val, int prec)
+char			*wstr_get(wchar_t *val, int prec)
 {
 	char *res;
 	char *wchar;

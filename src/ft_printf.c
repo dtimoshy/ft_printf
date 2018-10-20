@@ -28,16 +28,16 @@ void				prec_parse(const char **fmt, t_pf *pf)
 
 void				flag_parse(const char **fmt, t_pf *pf)
 {
-		if ((**fmt == ' '))
-			pf->space = 1;
-		else if (**fmt == '#')
-			pf->hash = 1;
-		else if (**fmt == '-')
-			pf->right = 1;
-		else if (**fmt == '0')
-			pf->zero = 1;
-		else if (**fmt == '+')
-			pf->sign = 1;
+	if ((**fmt == ' '))
+		pf->space = 1;
+	else if (**fmt == '#')
+		pf->hash = 1;
+	else if (**fmt == '-')
+		pf->right = 1;
+	else if (**fmt == '0')
+		pf->zero = 1;
+	else if (**fmt == '+')
+		pf->sign = 1;
 }
 
 static int			parse_to_pf(const char **fmt, t_pf *pf)
@@ -71,7 +71,7 @@ static int			parse_to_pf(const char **fmt, t_pf *pf)
 
 static int			manage_spec(const char **format, va_list arg)
 {
-	t_pf	*pf;
+	t_pf		*pf;
 	int			count;
 	int			temp;
 
@@ -83,13 +83,13 @@ static int			manage_spec(const char **format, va_list arg)
 	pf->space = 0;
 	pf->width = 0;
 	pf->prec = -1;
-	pf->length = NO;
+	pf->len = NO;
 	temp = parse_to_pf(format, pf);
 	if (temp == 0)
 		return (0);
 	spec_parse(format, pf);
 	count = num_convert(pf, arg);
-	count += char_convert(pf,arg);
+	count += char_convert(pf, arg);
 	ft_memdel((void **)&pf);
 	return (count);
 }
@@ -107,7 +107,6 @@ int					ft_printf(const char *format, ...)
 			ft_putchar(*format);
 			result++;
 			format++;
-
 		}
 		else
 		{

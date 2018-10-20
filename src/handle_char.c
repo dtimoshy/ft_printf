@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   handle_char.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dtimoshy <dtimoshy@student.unit.ua>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/10/20 13:33:08 by dtimoshy          #+#    #+#             */
+/*   Updated: 2018/10/20 13:33:09 by dtimoshy         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../inc/ft_printf.h"
 
@@ -21,29 +32,29 @@ static int		print_wid_c(t_pf *pf, size_t len)
 
 static int		print_char(t_pf *pf, char *result, size_t len)
 {
-	int printed;
+	int chars;
 
-	printed = (int)len;
+	chars = (int)len;
 	if (pf->right)
 	{
-		printed += prec_check_print(pf->prec, len, 0, 1);
-		if (pf->length != L)
+		chars += prec_check_print(pf->prec, len, 0, 1);
+		if (pf->len != L)
 			ft_putchar(result[0]);
 		else
 			ft_putstr(result);
-		printed += print_wid_c(pf, len);
+		chars += print_wid_c(pf, len);
 	}
 	else
 	{
-		printed += print_wid_c(pf, len);
-		printed += prec_check_print(pf->prec, len, 0, 1);
+		chars += print_wid_c(pf, len);
+		chars += prec_check_print(pf->prec, len, 0, 1);
 		if (*result == '\0')
 			ft_putchar('\0');
 		else
 			ft_putstr(result);
 	}
 	ft_strdel(&result);
-	return (printed);
+	return (chars);
 }
 
 int				handle_char(t_pf *pf, va_list args)
@@ -51,7 +62,7 @@ int				handle_char(t_pf *pf, va_list args)
 	char	*val;
 	size_t	len;
 
-	if (pf->length == L)
+	if (pf->len == L)
 		val = wchar_get(va_arg(args, wchar_t));
 	else
 	{

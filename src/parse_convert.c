@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_convert.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dtimoshy <dtimoshy@student.unit.ua>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/10/20 13:34:42 by dtimoshy          #+#    #+#             */
+/*   Updated: 2018/10/20 13:34:43 by dtimoshy         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../inc/ft_printf.h"
 
@@ -5,7 +16,7 @@ void	spec_parse(const char **fmt, t_pf *pf)
 {
 	if (ft_strchr("DOUCSp", **fmt))
 	{
-		pf->length = L;
+		pf->len = L;
 		if (**fmt == 'D')
 			pf->spec = 'd';
 		else if (**fmt == 'O')
@@ -30,29 +41,29 @@ void	len_parse(const char **fmt, t_pf *pf)
 {
 	if (**fmt == 'h' && *(*fmt + 1) == 'h')
 	{
-		pf->length = HH;
+		pf->len = HH;
 		*fmt += 2;
 	}
 	else if (**fmt == 'l' && *(*fmt + 1) == 'l')
 	{
-		pf->length = LL;
+		pf->len = LL;
 		*fmt += 2;
 	}
 	else if (ft_strchr("lhjz", (**fmt)))
 	{
-		if (**fmt == 'h' && (H - pf->length) >= 0)
-				pf->length = H;
-		else if (**fmt == 'l' && (L - pf->length) >= 0)
-				pf->length = L;
+		if (**fmt == 'h' && (H - pf->len) >= 0)
+			pf->len = H;
+		else if (**fmt == 'l' && (L - pf->len) >= 0)
+			pf->len = L;
 		else if (**fmt == 'j')
-			pf->length = J;
+			pf->len = J;
 		else if (**fmt == 'z')
-			pf->length = Z;
+			pf->len = Z;
 		(*fmt)++;
 	}
 }
 
-int			num_convert(t_pf *pf, va_list args)
+int		num_convert(t_pf *pf, va_list args)
 {
 	int res;
 
@@ -72,7 +83,7 @@ int			num_convert(t_pf *pf, va_list args)
 	return (res);
 }
 
-int			char_convert(t_pf *pf, va_list args)
+int		char_convert(t_pf *pf, va_list args)
 {
 	int res;
 

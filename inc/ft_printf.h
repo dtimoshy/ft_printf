@@ -35,7 +35,7 @@ typedef struct	s_pf
 	short		sign;
 	short		space;
 	short		hash;
-	short		length;
+	short		len;
 	int			width;
 	int			prec;
 	char		spec;

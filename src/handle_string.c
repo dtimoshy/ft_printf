@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   handle_string.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dtimoshy <dtimoshy@student.unit.ua>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/10/20 13:34:04 by dtimoshy          #+#    #+#             */
+/*   Updated: 2018/10/20 13:34:05 by dtimoshy         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../inc/ft_printf.h"
 
@@ -23,23 +34,23 @@ static int		print_wid_string(t_pf *pf, size_t len)
 
 static int		print_string(t_pf *pf, char *result, size_t len)
 {
-	int printed;
+	int chars;
 
-	printed = (int)len;
+	chars = (int)len;
 	if (pf->right)
 	{
-		printed += prec_check_print(pf->prec, len, 0, 1);
+		chars += prec_check_print(pf->prec, len, 0, 1);
 		ft_putstr(result);
-		printed += print_wid_string(pf, len);
+		chars += print_wid_string(pf, len);
 	}
 	else
 	{
-		printed += print_wid_string(pf, len);
-		printed += prec_check_print(pf->prec, len, 0, 1);
+		chars += print_wid_string(pf, len);
+		chars += prec_check_print(pf->prec, len, 0, 1);
 		ft_putstr(result);
 	}
 	ft_strdel(&result);
-	return (printed);
+	return (chars);
 }
 
 int				handle_string(t_pf *pf, va_list args)
@@ -48,7 +59,7 @@ int				handle_string(t_pf *pf, va_list args)
 	char	*result;
 	char	*temp;
 
-	if (pf->length != L)
+	if (pf->len != L)
 	{
 		val = va_arg(args, char *);
 		if (val == NULL)

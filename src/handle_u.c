@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   handle_u.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dtimoshy <dtimoshy@student.unit.ua>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/10/20 13:34:12 by dtimoshy          #+#    #+#             */
+/*   Updated: 2018/10/20 13:34:13 by dtimoshy         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../inc/ft_printf.h"
 
 static int	print_wid_u(t_pf *pf, size_t value_len)
@@ -22,24 +34,24 @@ static int	print_wid_u(t_pf *pf, size_t value_len)
 
 static int	print_value_u(t_pf *pf, char *result, size_t len)
 {
-	int printed;
+	int chars;
 
-	printed = (int)len;
+	chars = (int)len;
 	pf->zero *= pf->prec == -1;
 	if (pf->right)
 	{
-		printed += prec_check_print(pf->prec, len, 0, 1);
+		chars += prec_check_print(pf->prec, len, 0, 1);
 		ft_putstr(result);
-		printed += print_wid_u(pf, len);
+		chars += print_wid_u(pf, len);
 	}
 	else
 	{
-		printed += print_wid_u(pf, len);
-		printed += prec_check_print(pf->prec, len, 0, 1);
+		chars += print_wid_u(pf, len);
+		chars += prec_check_print(pf->prec, len, 0, 1);
 		ft_putstr(result);
 	}
 	ft_strdel(&result);
-	return (printed);
+	return (chars);
 }
 
 int			handle_u(t_pf *pf, va_list args)
@@ -49,17 +61,17 @@ int			handle_u(t_pf *pf, va_list args)
 	size_t	len;
 
 	value = va_arg(args, size_t);
-	if (pf->length == HH)
+	if (pf->len == HH)
 		value = (unsigned char)value;
-	else if (pf->length == H)
+	else if (pf->len == H)
 		value = (unsigned short)value;
-	else if (pf->length == LL)
+	else if (pf->len == LL)
 		value = (unsigned long long)value;
-	else if (pf->length == L)
+	else if (pf->len == L)
 		value = (unsigned long)value;
-	else if (pf->length == J)
+	else if (pf->len == J)
 		value = (uintmax_t)value;
-	else if (pf->length == Z)
+	else if (pf->len == Z)
 		value = (size_t)value;
 	else
 		value = (unsigned)value;
